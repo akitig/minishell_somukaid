@@ -37,12 +37,17 @@ int	main(int ac, char **av)
 			free(line);
 		}
 	}
-	// echo "hello" | ./minishell
-	// else
-	// {
-	// 	while ((line =) != NULL)
-	// 	{
-	// 	}
-	// }
+//	echo "hello" | ./minishell
+	else
+	{
+		while ((line = get_next_line(0)) != NULL)
+		{
+			// TODO:ttyって使うのかなー　存在するってなんだろー
+			// echo "/usr/bin/cat main.c" | /bin/bash
+			
+			ft_putstr_fd(line, 1);
+			free(line);
+		}
+	}
 	return (0);
 }
