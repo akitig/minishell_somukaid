@@ -12,37 +12,7 @@
 
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-size_t	ft_strlen(char *str)
-{
-	size_t	len;
-
-	len = 0;
-	while (*str)
-	{
-		len++;
-		str++;
-	}
-	return (len);
-}
-
-void	ft_putstr_fd(char *str, int fd)
-{
-	size_t	len;
-
-	if (!str)
-		return ;
-	len = ft_strlen(str);
-	while (len > 100)
-	{
-		write(fd, str, 100);
-		str += 100;
-		len -= 100;
-	}
-	write(fd, str, len);
-}
+#include "libft/libft.h"
 
 int	main(int ac, char **av)
 {
