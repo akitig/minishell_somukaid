@@ -1,0 +1,1036 @@
+[]                                                                    :status NG, expected 0 but got 127
+[/bin/pwd]                                                            :
+--- out	2025-03-16 22:48:49.327444279 +0900
++++ cmp	2025-03-16 22:48:49.323444230 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[/bin/pwd]                                                            :status NG, expected 0 but got 127
+[/bin/echo]                                                           :
+--- out	2025-03-16 22:48:49.391445068 +0900
++++ cmp	2025-03-16 22:48:49.387445019 +0900
+@@ -0,0 +1 @@
++
+[/bin/echo]                                                           :status NG, expected 0 but got 127
+[/bin/ls]                                                             :
+--- out	2025-03-16 22:48:49.395445117 +0900
++++ cmp	2025-03-16 22:48:49.395445117 +0900
+@@ -0,0 +1,9 @@
++a.out
++cmp
++error.log
++exit42
++out
++print_args
++print.sh
++test2.sh
++test.sh
+[/bin/ls]                                                             :status NG, expected 0 but got 127
+[pwd]                                                                 :
+--- out	2025-03-16 22:48:49.403445216 +0900
++++ cmp	2025-03-16 22:48:49.399445166 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[pwd]                                                                 :status NG, expected 0 but got 127
+[echo]                                                                :
+--- out	2025-03-16 22:48:49.407445265 +0900
++++ cmp	2025-03-16 22:48:49.407445265 +0900
+@@ -0,0 +1 @@
++
+[echo]                                                                :status NG, expected 0 but got 127
+[ls]                                                                  :
+--- out	2025-03-16 22:48:49.415445363 +0900
++++ cmp	2025-03-16 22:48:49.411445314 +0900
+@@ -0,0 +1,9 @@
++a.out
++cmp
++error.log
++exit42
++out
++print_args
++print.sh
++test2.sh
++test.sh
+[ls]                                                                  :status NG, expected 0 but got 127
+[./a.out]                                                             :
+--- out	2025-03-16 22:48:49.419445413 +0900
++++ cmp	2025-03-16 22:48:49.419445413 +0900
+@@ -0,0 +1 @@
++hello from a.out
+[./a.out]                                                             :status NG, expected 0 but got 127
+[./]                                                                  :status NG, expected 126 but got 127
+[/]                                                                   :status NG, expected 126 but got 127
+[/etc]                                                                :status NG, expected 126 but got 127
+[/etc/]                                                               :status NG, expected 126 but got 127
+[////]                                                                :status NG, expected 126 but got 127
+[./no_exec_perm]                                                      :status NG, expected 126 but got 127
+[./no_read_perm]                                                      :status NG, expected 0 but got 127
+[unset PATH\nexport PATH="/tmp/a:/tmp/b"\nsimple_test]                :status NG, expected 1 but got 127
+[unset PATH\nexport PATH="/tmp/b:/tmp/a"\nsimple_test]                :status NG, expected 2 but got 127
+[unset PATH\nexport PATH="/tmp/a:/tmp/b"\nsimple_test]                :status NG, expected 126 but got 127
+[unset PATH\nexport PATH="/tmp/b:/tmp/a"\nsimple_test]                :status NG, expected 126 but got 127
+[unset PATH\nexport PATH="/tmp/a:/tmp/b"\nsimple_test]                :status NG, expected 1 but got 127
+[unset PATH\nexport PATH="/tmp/b:/tmp/a"\nsimple_test]                :status NG, expected 1 but got 127
+[unset PATH\nexport PATH="/tmp/a:/tmp/b"\nsimple_test]                :status NG, expected 2 but got 127
+[unset PATH\nexport PATH="/tmp/b:/tmp/a"\nsimple_test]                :status NG, expected 2 but got 127
+[ls /]                                                                :
+--- out	2025-03-16 22:48:49.695448812 +0900
++++ cmp	2025-03-16 22:48:49.695448812 +0900
+@@ -0,0 +1,24 @@
++bin
++boot
++dev
++etc
++home
++lib
++lib32
++lib64
++libx32
++lost+found
++media
++mnt
++opt
++proc
++root
++run
++sbin
++snap
++srv
++swapfile
++sys
++tmp
++usr
++var
+[ls /]                                                                :status NG, expected 0 but got 127
+[echo hello    world     ]                                            :
+--- out	2025-03-16 22:48:49.699448862 +0900
++++ cmp	2025-03-16 22:48:49.699448862 +0900
+@@ -0,0 +1 @@
++hello world
+[echo hello    world     ]                                            :status NG, expected 0 but got 127
+[./print_args 'hello   world' '42Tokyo']                              :
+--- out	2025-03-16 22:48:49.711449009 +0900
++++ cmp	2025-03-16 22:48:49.711449009 +0900
+@@ -0,0 +1,3 @@
++argv[0] = [./print_args]
++argv[1] = [hello   world]
++argv[2] = [42Tokyo]
+[./print_args 'hello   world' '42Tokyo']                              :status NG, expected 0 but got 127
+[echo 'hello   world' '42Tokyo']                                      :
+--- out	2025-03-16 22:48:49.719449108 +0900
++++ cmp	2025-03-16 22:48:49.715449058 +0900
+@@ -0,0 +1 @@
++hello   world 42Tokyo
+[echo 'hello   world' '42Tokyo']                                      :status NG, expected 0 but got 127
+[echo '"hello   world"' '42Tokyo']                                    :
+--- out	2025-03-16 22:48:49.723449157 +0900
++++ cmp	2025-03-16 22:48:49.723449157 +0900
+@@ -0,0 +1 @@
++"hello   world" 42Tokyo
+[echo '"hello   world"' '42Tokyo']                                    :status NG, expected 0 but got 127
+[./print_args "hello   world" "42Tokyo"]                              :
+--- out	2025-03-16 22:48:49.731449255 +0900
++++ cmp	2025-03-16 22:48:49.727449206 +0900
+@@ -0,0 +1,3 @@
++argv[0] = [./print_args]
++argv[1] = [hello   world]
++argv[2] = [42Tokyo]
+[./print_args "hello   world" "42Tokyo"]                              :status NG, expected 0 but got 127
+[echo "hello   world" "42Tokyo"]                                      :
+--- out	2025-03-16 22:48:49.735449305 +0900
++++ cmp	2025-03-16 22:48:49.735449305 +0900
+@@ -0,0 +1 @@
++hello   world 42Tokyo
+[echo "hello   world" "42Tokyo"]                                      :status NG, expected 0 but got 127
+[echo "'hello   world'" "42Tokyo"]                                    :
+--- out	2025-03-16 22:48:49.739449354 +0900
++++ cmp	2025-03-16 22:48:49.739449354 +0900
+@@ -0,0 +1 @@
++'hello   world' 42Tokyo
+[echo "'hello   world'" "42Tokyo"]                                    :status NG, expected 0 but got 127
+[echo hello'      world']                                             :
+--- out	2025-03-16 22:48:49.747449453 +0900
++++ cmp	2025-03-16 22:48:49.743449403 +0900
+@@ -0,0 +1 @@
++hello      world
+[echo hello'      world']                                             :status NG, expected 0 but got 127
+[echo hello'  world  '"  42Tokyo  "]                                  :
+--- out	2025-03-16 22:48:49.751449502 +0900
++++ cmp	2025-03-16 22:48:49.751449502 +0900
+@@ -0,0 +1 @@
++hello  world    42Tokyo  
+[echo hello'  world  '"  42Tokyo  "]                                  :status NG, expected 0 but got 127
+[echo hello >hello.txt]                                               :status NG, expected 0 but got 127
+[echo hello >f1>f2>f3]                                                :status NG, expected 0 but got 127
+[cat <Makefile]                                                       :status NG, expected 1 but got 127
+[cat <f1<f2<f3]                                                       :
+--- out	2025-03-16 22:48:49.795450044 +0900
++++ cmp	2025-03-16 22:48:49.795450044 +0900
+@@ -0,0 +1 @@
++42Tokyo
+[cat <f1<f2<f3]                                                       :status NG, expected 0 but got 127
+[cat <hoge]                                                           :status NG, expected 1 but got 127
+[pwd >>pwd.txt]                                                       :status NG, expected 0 but got 127
+[pwd >>pwd.txt \n pwd >>pwd.txt]                                      :status NG, expected 0 but got 127
+[cat <<EOF\nhello\nworld\nEOF\nNOPRINT]                               :
+--- out	2025-03-16 22:48:49.827450438 +0900
++++ cmp	2025-03-16 22:48:49.827450438 +0900
+@@ -0,0 +1,2 @@
++hello
++world
+[cat <<EOF\nhello\nworld]                                             :
+--- out	2025-03-16 22:48:49.911451473 +0900
++++ cmp	2025-03-16 22:48:49.907451424 +0900
+@@ -0,0 +1,2 @@
++hello
++world
+[cat <<EOF\nhello\nworld]                                             :status NG, expected 0 but got 127
+[cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT]                             :
+--- out	2025-03-16 22:48:49.915451522 +0900
++++ cmp	2025-03-16 22:48:49.915451522 +0900
+@@ -0,0 +1,2 @@
++hello
++world
+[cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :
+--- out	2025-03-16 22:48:49.923451621 +0900
++++ cmp	2025-03-16 22:48:49.923451621 +0900
+@@ -0,0 +1,3 @@
++akitig
++
++
+[cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :status NG, expected 0 but got 127
+[cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :
+--- out	2025-03-16 22:48:49.931451719 +0900
++++ cmp	2025-03-16 22:48:49.931451719 +0900
+@@ -0,0 +1,3 @@
++$USER
++$NO_SUCH_VAR
++$FOO$BAR
+[cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :status NG, expected 0 but got 127
+[cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :
+--- out	2025-03-16 22:48:49.939451818 +0900
++++ cmp	2025-03-16 22:48:49.935451768 +0900
+@@ -0,0 +1,3 @@
++$USER
++$NO_SUCH_VAR
++$FOO$BAR
+[cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF]                    :status NG, expected 0 but got 127
+[cat <<$EOF         \neof\n$EOF\nEOF]                                 :
+--- out	2025-03-16 22:48:49.943451867 +0900
++++ cmp	2025-03-16 22:48:49.943451867 +0900
+@@ -0,0 +1 @@
++eof
+[cat <<"$EOF"       \neof\n$EOF\nEOF]                                 :
+--- out	2025-03-16 22:48:49.951451965 +0900
++++ cmp	2025-03-16 22:48:49.951451965 +0900
+@@ -0,0 +1 @@
++eof
+[cat Makefile | grep minishell]                                       :status NG, expected 1 but got 127
+[cat | cat | ls\n\n]                                                  :
+--- out	2025-03-16 22:48:49.967452163 +0900
++++ cmp	2025-03-16 22:48:49.967452163 +0900
+@@ -0,0 +1,11 @@
++a.out
++cmp
++error.log
++exit42
++no_exec_perm
++no_read_perm
++out
++print_args
++print.sh
++test2.sh
++test.sh
+[cat | cat | ls\n\n]                                                  :status NG, expected 0 but got 127
+[echo $USER]                                                          :
+--- out	2025-03-16 22:48:49.971452212 +0900
++++ cmp	2025-03-16 22:48:49.971452212 +0900
+@@ -0,0 +1 @@
++akitig
+[echo $USER]                                                          :status NG, expected 0 but got 127
+[echo $USER$PATH$TERM]                                                :
+--- out	2025-03-16 22:48:49.979452311 +0900
++++ cmp	2025-03-16 22:48:49.975452261 +0900
+@@ -0,0 +1 @@
++akitig/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/remote-cli:/home/akitig/.local/bin:/home/akitig/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/binxterm-256color
+[echo $USER$PATH$TERM]                                                :status NG, expected 0 but got 127
+[echo "$USER  $PATH   $TERM"]                                         :
+--- out	2025-03-16 22:48:49.983452360 +0900
++++ cmp	2025-03-16 22:48:49.983452360 +0900
+@@ -0,0 +1 @@
++akitig  /home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/remote-cli:/home/akitig/.local/bin:/home/akitig/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin   xterm-256color
+[echo "$USER  $PATH   $TERM"]                                         :status NG, expected 0 but got 127
+[echo $?]                                                             :
+--- out	2025-03-16 22:48:49.991452458 +0900
++++ cmp	2025-03-16 22:48:49.987452409 +0900
+@@ -0,0 +1 @@
++0
+[echo $?]                                                             :status NG, expected 0 but got 127
+[invalid\necho $?\necho $?]                                           :
+--- out	2025-03-16 22:48:49.995452508 +0900
++++ cmp	2025-03-16 22:48:49.995452508 +0900
+@@ -0,0 +1,2 @@
++127
++0
+[invalid\necho $?\necho $?]                                           :status NG, expected 0 but got 127
+[exit42\necho $?\necho $?]                                            :
+--- out	2025-03-16 22:48:50.003452606 +0900
++++ cmp	2025-03-16 22:48:50.003452606 +0900
+@@ -0,0 +1,2 @@
++127
++0
+[exit42\necho $?\necho $?]                                            :status NG, expected 0 but got 127
+[exit42\n\necho $?\necho $?]                                          :
+--- out	2025-03-16 22:48:50.007452655 +0900
++++ cmp	2025-03-16 22:48:50.007452655 +0900
+@@ -0,0 +1,2 @@
++127
++0
+[exit42\n\necho $?\necho $?]                                          :status NG, expected 0 but got 127
+[export FOO="echo hello"\n$FOO]                                       :
+--- out	2025-03-16 22:48:50.015452754 +0900
++++ cmp	2025-03-16 22:48:50.015452754 +0900
+@@ -0,0 +1 @@
++hello
+[export FOO="echo hello"\n$FOO]                                       :status NG, expected 0 but got 127
+[export TEST="cho -n"\ne$TEST]                                        :status NG, expected 0 but got 127
+[export FOO="a       b"\necho $FOO]                                   :
+--- out	2025-03-16 22:48:50.079453542 +0900
++++ cmp	2025-03-16 22:48:50.079453542 +0900
+@@ -0,0 +1 @@
++a b
+[export FOO="a       b"\necho $FOO]                                   :status NG, expected 0 but got 127
+[export FOO="a       b"\necho hello$FOO]                              :
+--- out	2025-03-16 22:48:50.083453591 +0900
++++ cmp	2025-03-16 22:48:50.083453591 +0900
+@@ -0,0 +1 @@
++helloa b
+[export FOO="a       b"\necho hello$FOO]                              :status NG, expected 0 but got 127
+[export FOO="a       b"\necho $FOO"world"]                            :
+--- out	2025-03-16 22:48:50.091453690 +0900
++++ cmp	2025-03-16 22:48:50.087453641 +0900
+@@ -0,0 +1 @@
++a bworld
+[export FOO="a       b"\necho $FOO"world"]                            :status NG, expected 0 but got 127
+[export FOO="a       b"\necho hello$FOO"world"]                       :
+--- out	2025-03-16 22:48:50.127454133 +0900
++++ cmp	2025-03-16 22:48:50.127454133 +0900
+@@ -0,0 +1 @@
++helloa bworld
+[export FOO="a       b"\necho hello$FOO"world"]                       :status NG, expected 0 but got 127
+[export FOO="echo a      b"\n$FOO]                                    :
+--- out	2025-03-16 22:48:50.131454182 +0900
++++ cmp	2025-03-16 22:48:50.131454182 +0900
+@@ -0,0 +1 @@
++a b
+[export FOO="echo a      b"\n$FOO]                                    :status NG, expected 0 but got 127
+[export IFS=""\nexport FOO="a       b"\n./print_args $FOO]            :
+--- out	2025-03-16 22:48:50.147454380 +0900
++++ cmp	2025-03-16 22:48:50.147454380 +0900
+@@ -0,0 +1,2 @@
++argv[0] = [./print_args]
++argv[1] = [a       b]
+[export IFS=""\nexport FOO="a       b"\n./print_args $FOO]            :status NG, expected 0 but got 127
+[export IFS=""\nexport FOO="a       b"\n./print_args hello$FOO]       :
+--- out	2025-03-16 22:48:50.151454429 +0900
++++ cmp	2025-03-16 22:48:50.151454429 +0900
+@@ -0,0 +1,2 @@
++argv[0] = [./print_args]
++argv[1] = [helloa       b]
+[export IFS=""\nexport FOO="a       b"\n./print_args hello$FOO]       :status NG, expected 0 but got 127
+[export IFS=""\nexport FOO="a       b"\n./print_args $FOO"world"]     :
+--- out	2025-03-16 22:48:50.159454527 +0900
++++ cmp	2025-03-16 22:48:50.159454527 +0900
+@@ -0,0 +1,2 @@
++argv[0] = [./print_args]
++argv[1] = [a       bworld]
+[export IFS=""\nexport FOO="a       b"\n./print_args $FOO"world"]     :status NG, expected 0 but got 127
+[export IFS=""\nexport FOO="a       b"\n./print_args hello$FOO"world"]:
+--- out	2025-03-16 22:48:50.167454626 +0900
++++ cmp	2025-03-16 22:48:50.167454626 +0900
+@@ -0,0 +1,2 @@
++argv[0] = [./print_args]
++argv[1] = [helloa       bworld]
+[export IFS=""\nexport FOO="a       b"\n./print_args hello$FOO"world"]:status NG, expected 0 but got 127
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args $FOO]          :
+--- out	2025-03-16 22:48:50.187454872 +0900
++++ cmp	2025-03-16 22:48:50.187454872 +0900
+@@ -0,0 +1,8 @@
++argv[0] = [./print_args]
++argv[1] = [x]
++argv[2] = []
++argv[3] = []
++argv[4] = []
++argv[5] = []
++argv[6] = []
++argv[7] = [y]
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args $FOO]          :status NG, expected 0 but got 127
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args hello$FOO]     :
+--- out	2025-03-16 22:48:50.191454921 +0900
++++ cmp	2025-03-16 22:48:50.191454921 +0900
+@@ -0,0 +1,8 @@
++argv[0] = [./print_args]
++argv[1] = [hellox]
++argv[2] = []
++argv[3] = []
++argv[4] = []
++argv[5] = []
++argv[6] = []
++argv[7] = [y]
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args hello$FOO]     :status NG, expected 0 but got 127
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args $FOO"world"]   :
+--- out	2025-03-16 22:48:50.199455020 +0900
++++ cmp	2025-03-16 22:48:50.199455020 +0900
+@@ -0,0 +1,8 @@
++argv[0] = [./print_args]
++argv[1] = [x]
++argv[2] = []
++argv[3] = []
++argv[4] = []
++argv[5] = []
++argv[6] = []
++argv[7] = [yworld]
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args $FOO"world"]   :status NG, expected 0 but got 127
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args hello$FOO"world"]:
+--- out	2025-03-16 22:48:50.207455118 +0900
++++ cmp	2025-03-16 22:48:50.203455069 +0900
+@@ -0,0 +1,8 @@
++argv[0] = [./print_args]
++argv[1] = [hellox]
++argv[2] = []
++argv[3] = []
++argv[4] = []
++argv[5] = []
++argv[6] = []
++argv[7] = [yworld]
+[export IFS="abc"\nexport FOO="xabcabcy"\n./print_args hello$FOO"world"]:status NG, expected 0 but got 127
+[export IFS="a"\nexport FOO="aaahelloaaaworldaaa"\n./print_args $FOO] :
+--- out	2025-03-16 22:48:50.219455266 +0900
++++ cmp	2025-03-16 22:48:50.219455266 +0900
+@@ -0,0 +1,10 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
++argv[7] = [world]
++argv[8] = []
++argv[9] = []
+[export IFS="a"\nexport FOO="aaahelloaaaworldaaa"\n./print_args $FOO] :status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO="   hello   world   "\n./print_args $FOO]:
+--- out	2025-03-16 22:48:50.223455316 +0900
++++ cmp	2025-03-16 22:48:50.223455316 +0900
+@@ -0,0 +1,3 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = [world]
+[export IFS="a "\nexport FOO="   hello   world   "\n./print_args $FOO]:status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO=" a a hello a a world a a "\n./print_args $FOO]:
+--- out	2025-03-16 22:48:50.231455414 +0900
++++ cmp	2025-03-16 22:48:50.231455414 +0900
+@@ -0,0 +1,7 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = [hello]
++argv[4] = []
++argv[5] = [world]
++argv[6] = []
+[export IFS="a "\nexport FOO=" a a hello a a world a a "\n./print_args $FOO]:status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO="aaa"\n./print_args $FOO]                :
+--- out	2025-03-16 22:48:50.239455513 +0900
++++ cmp	2025-03-16 22:48:50.239455513 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
+[export IFS="a "\nexport FOO="aaa"\n./print_args $FOO]                :status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO="helloaaa"\n./print_args $FOO]           :
+--- out	2025-03-16 22:48:50.247455611 +0900
++++ cmp	2025-03-16 22:48:50.243455562 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
+[export IFS="a "\nexport FOO="helloaaa"\n./print_args $FOO]           :status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO="helloaaaworld"\n./print_args $FOO]      :
+--- out	2025-03-16 22:48:50.251455660 +0900
++++ cmp	2025-03-16 22:48:50.251455660 +0900
+@@ -0,0 +1,5 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
++argv[4] = [world]
+[export IFS="a "\nexport FOO="helloaaaworld"\n./print_args $FOO]      :status NG, expected 0 but got 127
+[export IFS="a "\nexport FOO="aaahelloaaaworldaaa"\n./print_args $FOO]:
+--- out	2025-03-16 22:48:50.259455759 +0900
++++ cmp	2025-03-16 22:48:50.259455759 +0900
+@@ -0,0 +1,10 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
++argv[7] = [world]
++argv[8] = []
++argv[9] = []
+[export IFS="a "\nexport FOO="aaahelloaaaworldaaa"\n./print_args $FOO]:status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello: : :"\n./print_args $FOO]         :
+--- out	2025-03-16 22:48:50.263455808 +0900
++++ cmp	2025-03-16 22:48:50.263455808 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
+[export IFS=" :"\nexport FOO="hello: : :"\n./print_args $FOO]         :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello: : : "\n./print_args $FOO]        :
+--- out	2025-03-16 22:48:50.271455906 +0900
++++ cmp	2025-03-16 22:48:50.271455906 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
+[export IFS=" :"\nexport FOO="hello: : : "\n./print_args $FOO]        :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello : : :"\n./print_args $FOO]        :
+--- out	2025-03-16 22:48:50.279456005 +0900
++++ cmp	2025-03-16 22:48:50.275455956 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
+[export IFS=" :"\nexport FOO="hello : : :"\n./print_args $FOO]        :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello : : : "\n./print_args $FOO]       :
+--- out	2025-03-16 22:48:50.283456054 +0900
++++ cmp	2025-03-16 22:48:50.283456054 +0900
+@@ -0,0 +1,4 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
+[export IFS=" :"\nexport FOO="hello : : : "\n./print_args $FOO]       :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO=": : :hello: : :"\n./print_args $FOO]    :
+--- out	2025-03-16 22:48:50.291456153 +0900
++++ cmp	2025-03-16 22:48:50.291456153 +0900
+@@ -0,0 +1,7 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
+[export IFS=" :"\nexport FOO=": : :hello: : :"\n./print_args $FOO]    :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO=": : : hello: : : "\n./print_args $FOO]  :
+--- out	2025-03-16 22:48:50.299456252 +0900
++++ cmp	2025-03-16 22:48:50.295456202 +0900
+@@ -0,0 +1,7 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
+[export IFS=" :"\nexport FOO=": : : hello: : : "\n./print_args $FOO]  :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO=" : : :hello : : :"\n./print_args $FOO]  :
+--- out	2025-03-16 22:48:50.303456301 +0900
++++ cmp	2025-03-16 22:48:50.303456301 +0900
+@@ -0,0 +1,7 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
+[export IFS=" :"\nexport FOO=" : : :hello : : :"\n./print_args $FOO]  :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO=" : : : hello : : : "\n./print_args $FOO]:
+--- out	2025-03-16 22:48:50.311456399 +0900
++++ cmp	2025-03-16 22:48:50.311456399 +0900
+@@ -0,0 +1,7 @@
++argv[0] = [./print_args]
++argv[1] = []
++argv[2] = []
++argv[3] = []
++argv[4] = [hello]
++argv[5] = []
++argv[6] = []
+[export IFS=" :"\nexport FOO=" : : : hello : : : "\n./print_args $FOO]:status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello: : :world"\n./print_args $FOO]    :
+--- out	2025-03-16 22:48:50.319456498 +0900
++++ cmp	2025-03-16 22:48:50.319456498 +0900
+@@ -0,0 +1,5 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
++argv[4] = [world]
+[export IFS=" :"\nexport FOO="hello: : :world"\n./print_args $FOO]    :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello : : :world"\n./print_args $FOO]   :
+--- out	2025-03-16 22:48:50.327456596 +0900
++++ cmp	2025-03-16 22:48:50.327456596 +0900
+@@ -0,0 +1,5 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
++argv[4] = [world]
+[export IFS=" :"\nexport FOO="hello : : :world"\n./print_args $FOO]   :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello: : : world"\n./print_args $FOO]   :
+--- out	2025-03-16 22:48:50.363457040 +0900
++++ cmp	2025-03-16 22:48:50.359456990 +0900
+@@ -0,0 +1,5 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
++argv[4] = [world]
+[export IFS=" :"\nexport FOO="hello: : : world"\n./print_args $FOO]   :status NG, expected 0 but got 127
+[export IFS=" :"\nexport FOO="hello : : : world"\n./print_args $FOO]  :
+--- out	2025-03-16 22:48:50.371457138 +0900
++++ cmp	2025-03-16 22:48:50.367457089 +0900
+@@ -0,0 +1,5 @@
++argv[0] = [./print_args]
++argv[1] = [hello]
++argv[2] = []
++argv[3] = []
++argv[4] = [world]
+[export IFS=" :"\nexport FOO="hello : : : world"\n./print_args $FOO]  :status NG, expected 0 but got 127
+[echo "$IFS"]                                                         :
+--- out	2025-03-16 22:48:50.391457385 +0900
++++ cmp	2025-03-16 22:48:50.391457385 +0900
+@@ -0,0 +1,2 @@
++ 	
++
+[echo "$IFS"]                                                         :status NG, expected 0 but got 127
+[echo "$IFS"]                                                         :
+--- out	2025-03-16 22:48:50.399457483 +0900
++++ cmp	2025-03-16 22:48:50.399457483 +0900
+@@ -0,0 +1,2 @@
++ 	
++
+[echo "$IFS"]                                                         :status NG, expected 0 but got 127
+[export FOO="hello:world:42Tokyo"\n./print_args $FOO]                 :
+--- out	2025-03-16 22:48:50.407457582 +0900
++++ cmp	2025-03-16 22:48:50.403457532 +0900
+@@ -0,0 +1,2 @@
++argv[0] = [./print_args]
++argv[1] = [hello:world:42Tokyo]
+[export FOO="hello:world:42Tokyo"\n./print_args $FOO]                 :status NG, expected 0 but got 127
+[./infinite_loop]                                                     :status NG, expected 143 but got 127
+[./infinite_loop]                                                     :status NG, expected 143 but got 127
+[./infinite_loop]                                                     :status NG, expected 143 but got 127
+[./infinite_loop]                                                     :status NG, expected 143 but got 127
+[./infinite_loop]                                                     :status NG, expected 130 but got 127
+[./infinite_loop]                                                     :status NG, expected 130 but got 127
+[./infinite_loop]                                                     :status NG, expected 131 but got 127
+[exit]                                                                :status NG, expected 0 but got 127
+[exit 42]                                                             :status NG, expected 42 but got 127
+[exit -42]                                                            :status NG, expected 214 but got 127
+[exit +42]                                                            :status NG, expected 42 but got 127
+[exit ""]                                                             :status NG, expected 2 but got 127
+[exit hello]                                                          :status NG, expected 2 but got 127
+[exit 42Tokyo]                                                        :status NG, expected 2 but got 127
+[exit 1 2]                                                            :status NG, expected 1 but got 127
+[exit 9223372036854775806]                                            :status NG, expected 254 but got 127
+[exit 9223372036854775807]                                            :status NG, expected 255 but got 127
+[exit 9223372036854775808]                                            :status NG, expected 2 but got 127
+[exit -9223372036854775807]                                           :status NG, expected 1 but got 127
+[exit -9223372036854775808]                                           :status NG, expected 0 but got 127
+[exit -9223372036854775809]                                           :status NG, expected 2 but got 127
+[export]                                                              :
+--- out	2025-03-16 22:48:50.947464232 +0900
++++ cmp	2025-03-16 22:48:50.947464232 +0900
+@@ -0,0 +1,46 @@
++declare -x BROWSER="/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/helpers/browser.sh"
++declare -x COLORTERM="truecolor"
++declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1001/bus"
++declare -x GIT_ASKPASS="/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/extensions/git/dist/askpass.sh"
++declare -x HOME="/home/akitig"
++declare -x LANG="en_US.UTF-8"
++declare -x LANGUAGE="en_US.UTF-8"
++declare -x LC_ADDRESS="ja_JP.UTF-8"
++declare -x LC_IDENTIFICATION="ja_JP.UTF-8"
++declare -x LC_MEASUREMENT="ja_JP.UTF-8"
++declare -x LC_MONETARY="ja_JP.UTF-8"
++declare -x LC_NAME="ja_JP.UTF-8"
++declare -x LC_NUMERIC="ja_JP.UTF-8"
++declare -x LC_PAPER="ja_JP.UTF-8"
++declare -x LC_TELEPHONE="ja_JP.UTF-8"
++declare -x LC_TIME="ja_JP.UTF-8"
++declare -x LESSCLOSE="/usr/bin/lesspipe %s %s"
++declare -x LESSOPEN="| /usr/bin/lesspipe %s"
++declare -x LOGNAME="akitig"
++declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
++declare -x MOTD_SHOWN="pam"
++declare -x OLDPWD="/home/akitig/Desktop/42/Akatuki/minishell"
++declare -x PAPERSIZE="a4"
++declare -x PATH="/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/remote-cli:/home/akitig/.local/bin:/home/akitig/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
++declare -x PWD="/home/akitig/Desktop/42/Akatuki/minishell/tests"
++declare -x SHELL="/bin/bash"
++declare -x SHLVL="3"
++declare -x SSH_CLIENT="133.203.189.128 53502 22"
++declare -x SSH_CONNECTION="133.203.189.128 53502 162.43.47.111 22"
++declare -x SSL_CERT_DIR="/usr/lib/ssl/certs"
++declare -x SSL_CERT_FILE="/usr/lib/ssl/certs/ca-certificates.crt"
++declare -x TERM="xterm-256color"
++declare -x TERM_PROGRAM="vscode"
++declare -x TERM_PROGRAM_VERSION="1.98.0"
++declare -x USER="akitig"
++declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
++declare -x VSCODE_GIT_ASKPASS_MAIN="/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/extensions/git/dist/askpass-main.js"
++declare -x VSCODE_GIT_ASKPASS_NODE="/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/node"
++declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1001/vscode-git-a343ec426d.sock"
++declare -x VSCODE_IPC_HOOK_CLI="/run/user/1001/vscode-ipc-7db75510-e7ab-4f51-8646-c171bcb2ed92.sock"
++declare -x XDG_DATA_DIRS="/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop"
++declare -x XDG_RUNTIME_DIR="/run/user/1001"
++declare -x XDG_SESSION_CLASS="user"
++declare -x XDG_SESSION_ID="4551"
++declare -x XDG_SESSION_TYPE="tty"
++declare -x _="/usr/bin/bash"
+[export]                                                              :status NG, expected 0 but got 127
+[export | grep nosuch | sort]                                         :status NG, expected 0 but got 127
+[export nosuch\n export | grep nosuch | sort]                         :
+--- out	2025-03-16 22:48:50.963464429 +0900
++++ cmp	2025-03-16 22:48:50.963464429 +0900
+@@ -0,0 +1 @@
++declare -x nosuch
+[export nosuch\n export | grep nosuch | sort]                         :status NG, expected 0 but got 127
+[export nosuch=fuga\n export | grep nosuch | sort]                    :
+--- out	2025-03-16 22:48:50.971464528 +0900
++++ cmp	2025-03-16 22:48:50.971464528 +0900
+@@ -0,0 +1 @@
++declare -x nosuch="fuga"
+[export nosuch=fuga\n export | grep nosuch | sort]                    :status NG, expected 0 but got 127
+[export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort]        :
+--- out	2025-03-16 22:48:50.979464626 +0900
++++ cmp	2025-03-16 22:48:50.979464626 +0900
+@@ -0,0 +1,2 @@
++declare -x hoge="nosuch"
++declare -x nosuch="fuga"
+[export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort]        :status NG, expected 0 but got 127
+[export [invalid]]                                                    :status NG, expected 1 but got 127
+[export [invalid_nosuch]\n export | grep nosuch | sort]               :status NG, expected 0 but got 127
+[export [invalid]=nosuch\n export | grep nosuch | sort]               :status NG, expected 0 but got 127
+[export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort]   :
+--- out	2025-03-16 22:48:51.007464971 +0900
++++ cmp	2025-03-16 22:48:51.003464922 +0900
+@@ -0,0 +1,2 @@
++declare -x hoge="nosuch"
++declare -x nosuch
+[export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort]   :status NG, expected 0 but got 127
+[export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort]   :
+--- out	2025-03-16 22:48:51.011465020 +0900
++++ cmp	2025-03-16 22:48:51.011465020 +0900
+@@ -0,0 +1,2 @@
++declare -x hoge="nosuch"
++declare -x nosuch
+[export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort]   :status NG, expected 0 but got 127
+[export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort]   :
+--- out	2025-03-16 22:48:51.019465118 +0900
++++ cmp	2025-03-16 22:48:51.019465118 +0900
+@@ -0,0 +1,2 @@
++declare -x hoge="nosuch"
++declare -x nosuch
+[export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort]   :status NG, expected 0 but got 127
+[export nosuch="nosuch2=hoge"\nexport $nosuch\n export | grep nosuch | sort]:
+--- out	2025-03-16 22:48:51.027465217 +0900
++++ cmp	2025-03-16 22:48:51.027465217 +0900
+@@ -0,0 +1,2 @@
++declare -x nosuch2="hoge"
++declare -x nosuch="nosuch2=hoge"
+[export nosuch="nosuch2=hoge"\nexport $nosuch\n export | grep nosuch | sort]:status NG, expected 0 but got 127
+[unset]                                                               :status NG, expected 0 but got 127
+[unset hoge]                                                          :status NG, expected 0 but got 127
+[unset fuga]                                                          :status NG, expected 0 but got 127
+[unset nosuch]                                                        :status NG, expected 0 but got 127
+[unset [invalid]]                                                     :status NG, expected 0 but got 127
+[unset hoge fuga]                                                     :status NG, expected 0 but got 127
+[unset hoge nosuch fuga]                                              :status NG, expected 0 but got 127
+[unset fuga \n export | echo $fuga]                                   :
+--- out	2025-03-16 22:48:51.071465759 +0900
++++ cmp	2025-03-16 22:48:51.071465759 +0900
+@@ -0,0 +1 @@
++
+[unset fuga \n export | echo $fuga]                                   :status NG, expected 0 but got 127
+[unset [invalid] fuga \n echo $fuga]                                  :
+--- out	2025-03-16 22:48:51.079465858 +0900
++++ cmp	2025-03-16 22:48:51.075465808 +0900
+@@ -0,0 +1 @@
++
+[unset [invalid] fuga \n echo $fuga]                                  :status NG, expected 0 but got 127
+[env]                                                                 :
+--- out	2025-03-16 22:48:51.103466153 +0900
++++ cmp	2025-03-16 22:48:51.103466153 +0900
+@@ -0,0 +1,46 @@
++SHELL=/bin/bash
++COLORTERM=truecolor
++TERM_PROGRAM_VERSION=1.98.0
++LANGUAGE=en_US.UTF-8
++LC_ADDRESS=ja_JP.UTF-8
++LC_NAME=ja_JP.UTF-8
++LC_MONETARY=ja_JP.UTF-8
++PWD=/home/akitig/Desktop/42/Akatuki/minishell/tests
++LOGNAME=akitig
++XDG_SESSION_TYPE=tty
++_=/usr/bin/env
++VSCODE_GIT_ASKPASS_NODE=/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/node
++MOTD_SHOWN=pam
++HOME=/home/akitig
++LC_PAPER=ja_JP.UTF-8
++LANG=en_US.UTF-8
++LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
++SSL_CERT_DIR=/usr/lib/ssl/certs
++GIT_ASKPASS=/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/extensions/git/dist/askpass.sh
++SSH_CONNECTION=133.203.189.128 53502 162.43.47.111 22
++VSCODE_GIT_ASKPASS_EXTRA_ARGS=
++LESSCLOSE=/usr/bin/lesspipe %s %s
++XDG_SESSION_CLASS=user
++TERM=xterm-256color
++LC_IDENTIFICATION=ja_JP.UTF-8
++LESSOPEN=| /usr/bin/lesspipe %s
++USER=akitig
++VSCODE_GIT_IPC_HANDLE=/run/user/1001/vscode-git-a343ec426d.sock
++SHLVL=3
++LC_TELEPHONE=ja_JP.UTF-8
++LC_MEASUREMENT=ja_JP.UTF-8
++XDG_SESSION_ID=4551
++PAPERSIZE=a4
++XDG_RUNTIME_DIR=/run/user/1001
++SSL_CERT_FILE=/usr/lib/ssl/certs/ca-certificates.crt
++SSH_CLIENT=133.203.189.128 53502 22
++LC_TIME=ja_JP.UTF-8
++VSCODE_GIT_ASKPASS_MAIN=/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/extensions/git/dist/askpass-main.js
++XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop
++BROWSER=/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/helpers/browser.sh
++PATH=/home/akitig/.vscode-server/cli/servers/Stable-6609ac3d66f4eade5cf376d1cb76f13985724bcb/server/bin/remote-cli:/home/akitig/.local/bin:/home/akitig/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
++DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
++LC_NUMERIC=ja_JP.UTF-8
++OLDPWD=/home/akitig/Desktop/42/Akatuki/minishell
++TERM_PROGRAM=vscode
++VSCODE_IPC_HOOK_CLI=/run/user/1001/vscode-ipc-7db75510-e7ab-4f51-8646-c171bcb2ed92.sock
+[env]                                                                 :status NG, expected 0 but got 127
+[env | grep hoge | sort]                                              :status NG, expected 0 but got 127
+[cd]                                                                  :status NG, expected 0 but got 127
+[cd .]                                                                :status NG, expected 0 but got 127
+[cd ..]                                                               :status NG, expected 0 but got 127
+[cd ///]                                                              :status NG, expected 0 but got 127
+[cd /tmp]                                                             :status NG, expected 0 but got 127
+[cd /tmp/]                                                            :status NG, expected 0 but got 127
+[cd /tmp///]                                                          :status NG, expected 0 but got 127
+[cd /../../../././.././]                                              :status NG, expected 0 but got 127
+[cd src]                                                              :status NG, expected 1 but got 127
+[unset HOME\ncd]                                                      :status NG, expected 1 but got 127
+[cd \n echo $PWD]                                                     :
+--- out	2025-03-16 22:48:51.151466744 +0900
++++ cmp	2025-03-16 22:48:51.151466744 +0900
+@@ -0,0 +1 @@
++/home/akitig
+[cd \n echo $PWD]                                                     :status NG, expected 0 but got 127
+[cd \n echo $PWD]                                                     :
+--- out	2025-03-16 22:48:51.159466843 +0900
++++ cmp	2025-03-16 22:48:51.159466843 +0900
+@@ -0,0 +1 @@
++/home/akitig
+[cd \n echo $PWD]                                                     :status NG, expected 0 but got 127
+[cd .\n echo $PWD]                                                    :
+--- out	2025-03-16 22:48:51.163466892 +0900
++++ cmp	2025-03-16 22:48:51.163466892 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd .\n echo $PWD]                                                    :status NG, expected 0 but got 127
+[cd ..\n echo $PWD]                                                   :
+--- out	2025-03-16 22:48:51.247467926 +0900
++++ cmp	2025-03-16 22:48:51.247467926 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell
+[cd ..\n echo $PWD]                                                   :status NG, expected 0 but got 127
+[cd ///\n echo $PWD]                                                  :
+--- out	2025-03-16 22:48:51.251467975 +0900
++++ cmp	2025-03-16 22:48:51.251467975 +0900
+@@ -0,0 +1 @@
++/
+[cd ///\n echo $PWD]                                                  :status NG, expected 0 but got 127
+[cd /tmp\n echo $PWD]                                                 :
+--- out	2025-03-16 22:48:51.259468074 +0900
++++ cmp	2025-03-16 22:48:51.259468074 +0900
+@@ -0,0 +1 @@
++/tmp
+[cd /tmp\n echo $PWD]                                                 :status NG, expected 0 but got 127
+[cd /tmp/\n echo $PWD]                                                :
+--- out	2025-03-16 22:48:51.267468172 +0900
++++ cmp	2025-03-16 22:48:51.263468123 +0900
+@@ -0,0 +1 @@
++/tmp
+[cd /tmp/\n echo $PWD]                                                :status NG, expected 0 but got 127
+[cd /tmp///\n echo $PWD]                                              :
+--- out	2025-03-16 22:48:51.351469207 +0900
++++ cmp	2025-03-16 22:48:51.351469207 +0900
+@@ -0,0 +1 @@
++/tmp
+[cd /tmp///\n echo $PWD]                                              :status NG, expected 0 but got 127
+[cd /../../../././.././\n echo $PWD]                                  :
+--- out	2025-03-16 22:48:51.355469256 +0900
++++ cmp	2025-03-16 22:48:51.355469256 +0900
+@@ -0,0 +1 @@
++/
+[cd /../../../././.././\n echo $PWD]                                  :status NG, expected 0 but got 127
+[cd src\n echo $PWD]                                                  :
+--- out	2025-03-16 22:48:51.367469404 +0900
++++ cmp	2025-03-16 22:48:51.363469355 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd src\n echo $PWD]                                                  :status NG, expected 0 but got 127
+[unset HOME\ncd \n echo $PWD]                                         :
+--- out	2025-03-16 22:48:51.371469453 +0900
++++ cmp	2025-03-16 22:48:51.371469453 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[unset HOME\ncd \n echo $PWD]                                         :status NG, expected 0 but got 127
+[echo]                                                                :
+--- out	2025-03-16 22:48:51.383469601 +0900
++++ cmp	2025-03-16 22:48:51.379469552 +0900
+@@ -0,0 +1 @@
++
+[echo]                                                                :status NG, expected 0 but got 127
+[echo hello]                                                          :
+--- out	2025-03-16 22:48:51.387469650 +0900
++++ cmp	2025-03-16 22:48:51.387469650 +0900
+@@ -0,0 +1 @@
++hello
+[echo hello]                                                          :status NG, expected 0 but got 127
+[echo hello "    " world]                                             :
+--- out	2025-03-16 22:48:51.391469699 +0900
++++ cmp	2025-03-16 22:48:51.391469699 +0900
+@@ -0,0 +1 @@
++hello      world
+[echo hello "    " world]                                             :status NG, expected 0 but got 127
+[echo -n]                                                             :status NG, expected 0 but got 127
+[echo -n hello]                                                       :
+--- out	2025-03-16 22:48:51.403469847 +0900
++++ cmp	2025-03-16 22:48:51.403469847 +0900
+@@ -0,0 +1 @@
++hello
+\ No newline at end of file
+[echo -n hello]                                                       :status NG, expected 0 but got 127
+[echo -n hello world]                                                 :
+--- out	2025-03-16 22:48:51.407469896 +0900
++++ cmp	2025-03-16 22:48:51.407469896 +0900
+@@ -0,0 +1 @@
++hello world
+\ No newline at end of file
+[echo -n hello world]                                                 :status NG, expected 0 but got 127
+[echo hello -n]                                                       :
+--- out	2025-03-16 22:48:51.415469995 +0900
++++ cmp	2025-03-16 22:48:51.415469995 +0900
+@@ -0,0 +1 @@
++hello -n
+[echo hello -n]                                                       :status NG, expected 0 but got 127
+[echo -nn]                                                            :status NG, expected 0 but got 127
+[echo -n-n-n]                                                         :
+--- out	2025-03-16 22:48:51.427470142 +0900
++++ cmp	2025-03-16 22:48:51.423470093 +0900
+@@ -0,0 +1 @@
++-n-n-n
+[echo -n-n-n]                                                         :status NG, expected 0 but got 127
+[echo ";|()"]                                                         :
+--- out	2025-03-16 22:48:51.431470192 +0900
++++ cmp	2025-03-16 22:48:51.431470192 +0900
+@@ -0,0 +1 @@
++;|()
+[echo ";|()"]                                                         :status NG, expected 0 but got 127
+[pwd]                                                                 :
+--- out	2025-03-16 22:48:51.439470290 +0900
++++ cmp	2025-03-16 22:48:51.435470241 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[pwd]                                                                 :status NG, expected 0 but got 127
+[cd\npwd]                                                             :
+--- out	2025-03-16 22:48:51.443470340 +0900
++++ cmp	2025-03-16 22:48:51.443470340 +0900
+@@ -0,0 +1 @@
++/home/akitig
+[cd\npwd]                                                             :status NG, expected 0 but got 127
+[cd src\npwd]                                                         :
+--- out	2025-03-16 22:48:51.447470389 +0900
++++ cmp	2025-03-16 22:48:51.447470389 +0900
+@@ -0,0 +1 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd src\npwd]                                                         :status NG, expected 0 but got 127
+[cd /etc\npwd]                                                        :
+--- out	2025-03-16 22:48:51.455470488 +0900
++++ cmp	2025-03-16 22:48:51.451470438 +0900
+@@ -0,0 +1 @@
++/etc
+[cd /etc\npwd]                                                        :status NG, expected 0 but got 127
+[cd . \n pwd \n echo $PWD $OLDPWD]                                    :
+--- out	2025-03-16 22:48:51.459470537 +0900
++++ cmp	2025-03-16 22:48:51.459470537 +0900
+@@ -0,0 +1,2 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
++/home/akitig/Desktop/42/Akatuki/minishell/tests /home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd . \n pwd \n echo $PWD $OLDPWD]                                    :status NG, expected 0 but got 127
+[cd .. \n pwd \n echo $PWD $OLDPWD]                                   :
+--- out	2025-03-16 22:48:51.467470635 +0900
++++ cmp	2025-03-16 22:48:51.467470635 +0900
+@@ -0,0 +1,2 @@
++/home/akitig/Desktop/42/Akatuki/minishell
++/home/akitig/Desktop/42/Akatuki/minishell /home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd .. \n pwd \n echo $PWD $OLDPWD]                                   :status NG, expected 0 but got 127
+[cd /// \n pwd \n echo $PWD $OLDPWD]                                  :
+--- out	2025-03-16 22:48:51.471470685 +0900
++++ cmp	2025-03-16 22:48:51.471470685 +0900
+@@ -0,0 +1,2 @@
++/
++/ /home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd /// \n pwd \n echo $PWD $OLDPWD]                                  :status NG, expected 0 but got 127
+[cd /tmp/// \n pwd \n echo $PWD $OLDPWD]                              :
+--- out	2025-03-16 22:48:51.475470734 +0900
++++ cmp	2025-03-16 22:48:51.475470734 +0900
+@@ -0,0 +1,2 @@
++/tmp
++/tmp /home/akitig/Desktop/42/Akatuki/minishell/tests
+[cd /tmp/// \n pwd \n echo $PWD $OLDPWD]                              :status NG, expected 0 but got 127
+[unset PWD\npwd\ncd /etc\npwd]                                        :
+--- out	2025-03-16 22:48:51.483470832 +0900
++++ cmp	2025-03-16 22:48:51.483470832 +0900
+@@ -0,0 +1,2 @@
++/home/akitig/Desktop/42/Akatuki/minishell/tests
++/etc
+[unset PWD\npwd\ncd /etc\npwd]                                        :status NG, expected 0 but got 127
+[unset PWD \n cd \n echo $PWD \ncd /tmp\necho $PWD]                   :
+--- out	2025-03-16 22:48:51.499471029 +0900
++++ cmp	2025-03-16 22:48:51.499471029 +0900
+@@ -0,0 +1,2 @@
++/home/akitig
++/tmp
+[unset PWD \n cd \n echo $PWD \ncd /tmp\necho $PWD]                   :status NG, expected 0 but got 127
+[unset PWD\ncd\necho $OLDPWD\ncd /tmp\necho $OLDPWD]                  :
+--- out	2025-03-16 22:48:51.507471127 +0900
++++ cmp	2025-03-16 22:48:51.507471127 +0900
+@@ -0,0 +1,2 @@
++
++/home/akitig
+[unset PWD\ncd\necho $OLDPWD\ncd /tmp\necho $OLDPWD]                  :status NG, expected 0 but got 127
+[unset PWD\ncd\nexport|grep PWD\ncd /tmp\nexport|grep PWD]            :
+--- out	2025-03-16 22:48:51.515471226 +0900
++++ cmp	2025-03-16 22:48:51.515471226 +0900
+@@ -0,0 +1,2 @@
++declare -x OLDPWD
++declare -x OLDPWD="/home/akitig"
+[unset PWD\ncd\nexport|grep PWD\ncd /tmp\nexport|grep PWD]            :status NG, expected 0 but got 127
+[unset PWD\ncd\nenv|grep PWD\ncd /tmp\nenv|grep PWD]                  :
+--- out	2025-03-16 22:48:51.527471374 +0900
++++ cmp	2025-03-16 22:48:51.527471374 +0900
+@@ -0,0 +1 @@
++OLDPWD=/home/akitig
+[unset PWD\ncd\nenv|grep PWD\ncd /tmp\nenv|grep PWD]                  :status NG, expected 0 but got 127
