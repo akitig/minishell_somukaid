@@ -1,25 +1,60 @@
-NAME	=	minishell
-SRCS	=	main.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/15 15:32:16 by akunimot          #+#    #+#              #
+#    Updated: 2025/03/15 15:40:07 by akunimot         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-OBJS	=	$(SRCS:.c=.o)
-CC		=	cc 
-CFLAGS	=	-Wall -Wextra -Werror
+NAME         = minishell
+CC           = cc
+CFLAGS       = -Wall -Wextra -Werror -g
 
-$(NAME) : $(OBJS)
-	make -C libft
-	$(CC) -o $(NAME) $(OBJS) libft/libft.a -lreadline
+# ---------- libft --------------
+LIBFT_DIR    = ./libft
+LIBFT_NAME   = libft.a
+LIBFT        = $(LIBFT_DIR)/$(LIBFT_NAME)
 
-all: $(NAME)
+# ---------- srcs/objs ----------
+SRC_DIR      = ./srcs
+OBJ_DIR      = ./objs
 
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+SRCS         = $(SRC_DIR)/main.c
 
+OBJS         = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+READLINE     = -lreadline
+
+# ==============================================================================
+
+all: $(LIBFT) $(NAME)
+
+# ---------- Minishell ----------
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINE) -o $(NAME)
+	@echo "minishell compiled."
+
+# ---------- libft --------------
+$(LIBFT):
+	@echo "Making libft..."
+	@$(MAKE) -C $(LIBFT_DIR)
+
+# ---------- make objs ----------
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -I./includes -I$(LIBFT_DIR) -c $< -o $@
+
+# ---------- clean --------------
 clean:
-	rm -f $(OBJS)
-#	make fclean -C libft/lib
-	make -C libft fclean
+	@$(MAKE) -C $(LIBFT_DIR) clean
+	rm -rf $(OBJ_DIR)
 
-fclean:	clean
+fclean: clean
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
 
 norm:

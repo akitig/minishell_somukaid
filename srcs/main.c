@@ -6,13 +6,11 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:50:37 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/15 14:18:05 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:42:24 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/history.h>
-#include <readline/readline.h>
-#include "libft/libft.h"
+#include "../includes/minishell.h"
 
 int	main(int ac, char **av)
 {
@@ -37,14 +35,14 @@ int	main(int ac, char **av)
 			free(line);
 		}
 	}
-//	echo "hello" | ./minishell
+	//	echo "hello" | ./minishell
 	else
 	{
 		while ((line = get_next_line(0)) != NULL)
 		{
 			// TODO:ttyって使うのかなー　存在するってなんだろー
 			// echo "/usr/bin/cat main.c" | /bin/bash
-			
+
 			ft_putstr_fd(line, 1);
 			free(line);
 		}
