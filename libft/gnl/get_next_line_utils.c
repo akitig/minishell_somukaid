@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
+/*   By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:37:50 by akunimot          #+#    #+#             */
-/*   Updated: 2025/02/04 19:20:30 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:38:40 by somukaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
-
+/*
 size_t	ft_strlen(const char *str)
 {
 	int	count;
@@ -24,7 +24,7 @@ size_t	ft_strlen(const char *str)
 	}
 	return (count);
 }
-
+*/
 // ft_memset(s, 0, n);
 void	ft_bzero(void *s, size_t n)
 {

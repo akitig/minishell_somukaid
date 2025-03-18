@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
+#    By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 15:32:16 by akunimot          #+#    #+#              #
-#    Updated: 2025/03/15 15:40:07 by akunimot         ###   ########.fr        #
+#    Updated: 2025/03/18 09:55:57 by somukaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,11 @@ fclean: clean
 norm:
 #	norminette minishell.h
 	norminette $(SRCS)
+
+# ---------- Minishell ----------
+debug:
+	@$(CC) -g -O0 $(CFLAGS) $(SRCS) $(LIBFT) $(READLINE) -o $(NAME)
+	@echo "minishell debug compiled."
 
 re:	fclean	all
 
