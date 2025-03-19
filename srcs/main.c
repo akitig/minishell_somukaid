@@ -17,7 +17,7 @@ typedef enum e_token_type
 	TK_WORD,
 	TK_OP,
 	TK_EOF,
-	TK_RESERVED
+//	TK_RESERVED
 }						t_token_type;
 
 typedef struct s_token	t_token;
@@ -51,48 +51,82 @@ void	ft_lstadd_back_token(t_token **token, t_token *new)
 		ft_lstlast_token(*token)->next = new;
 }
 
-// スペースの区切りごとにtmp_token->wordを作成
-// | & ; ( ) < > space tab のスペースにしか対応できてない
-// ls>output.txt とか echo hello|cat とかは今は無理
-// ls>output.txt を分割したらどうなる？ ls > output.txt になるのか？ ls output.txtになっちゃうと引数なのかリダイレクトなのかわからんしな
-// 要相談
+// metacharacterかどうか
+int	is_metachar(char c)
+{
+	if (c == '|' || c == '&' || c == ';' || c == '(' || c == ')' || c == '<' || c == '>' || c == ' ')
+		return (1);
+	return (0);
+}
+
+// metacharacterの区切りごとにtmp_token->wordを作成
 void    split_token(char *input, int *index, int *word_first, char **tmp_token_word)
 {
-        if (input[*index] && '\0' != input[*index])
+    if (input[*index] && '\0' != input[*index])
+    {
+        while (' ' == input[*index] && '\0' != input[*index])
+    	    ++(*index);
+    }
+	if (input[*index] == '\0')
+		return ;
+	if (is_metachar(input[*index]))
+	{
+		if (input[(*index) + 1] == '>' || input[(*index) + 1] == '<')
+		{
+			*tmp_token_word = ft_substr(input, *index, 2); // >>, << に対応
+			++(*index);
+		}
+		else
+			*tmp_token_word = ft_substr(input, *index, 1);
+		++(*index);
+		return ;
+	}
+    *word_first = *index;
+    while (!is_metachar(input[*index]) && '\0' != input[*index])
+    {
+        if ('"' == input[*index])
         {
-                while (' ' == input[*index] && '\0' != input[*index])
-                        ++(*index);
-        }
-		if (input[*index] == '\0')
-			return ;
-        *word_first = *index;
-        while (' ' != input[*index] && '\0' != input[*index])
-        {
-                if ('"' == input[*index])
-                {
-                        ++(*index);
-                        while ('"' != input[*index])
-                                ++(*index);
-                }
-                if ('\'' == input[*index])
-                {
-                        ++(*index);
-                        while ('\'' != input[*index])
-                                ++(*index);
-                }
+            ++(*index);
+            while ('"' != input[*index])
                 ++(*index);
         }
-        *tmp_token_word = ft_substr(input, *word_first, *index - *word_first);
+        if ('\'' == input[*index])
+        {
+            ++(*index);
+            while ('\'' != input[*index])
+                ++(*index);
+        }
+        ++(*index);
+    }
+    *tmp_token_word = ft_substr(input, *word_first, *index - *word_first);
 }
+
+// operator一覧
+char	**make_data(void)
+{
+	char	**op_list;
+
+	op_list = (char **)malloc(sizeof(char *) * 9);
+	op_list[0] = "||";
+	op_list[1] = "&";
+	op_list[2] = "&&";
+	op_list[3] = ";";
+	op_list[4] = ";;";
+	op_list[5] = "(";
+	op_list[6] = ")";
+	op_list[7] = "|";
+	op_list[8] = "|&";
+	return (op_list);
+}
+
 
 // トークンのタイプを調べてtmp_token->typeに代入
 void	assign_type(t_token **tmp_token)
 {
-	char	op_list[9][3] = {"||", "&", "&&", ";",  ";;", "(",  ")", "|", "|&"};
-	char	reserved_list[21][9] = {"!", "case", "do", "done", "elif", "else", "esac", "fi", "for", "function", "if", "in", "select", "then", "until", "while", "{", "}", "time", "[[", "]]"};
+	char	**op_list;
 	size_t	i;
-	size_t	j;
-
+	
+	op_list = make_data();
 	i = 0;
 	while (i < 9)
 	{
@@ -103,19 +137,10 @@ void	assign_type(t_token **tmp_token)
 		}
 		++i;
 	}
-	j = 0;
-	while (j < 21)
-	{
-		if (!ft_strncmp((*tmp_token)->word, reserved_list[j], ft_strlen(reserved_list[j])))
-		{
-			(*tmp_token)->type = TK_RESERVED;
-			break ;
-		}
-		++j;
-	}
-	if (i == 9 && j == 21)
+	if (i == 9)
 		(*tmp_token)->type = TK_WORD;
-	// TK_EOFってどんなトークンにつくんや…？
+	if (((*tmp_token)->word)[0] == ';')
+		(*tmp_token)->type = TK_EOF; //今のところ、明示的に;があるときだけ
 }
 
 // tokenizeテスト１
@@ -125,12 +150,12 @@ t_token	*tokenize(char *line)
     t_token  *tmp_token;
     int             index;
     int             word_first;
-	char    *tmp_str;
+	//char    *tmp_str;
 
     token = NULL;
     index = 0;
     word_first = 0;
-    tmp_str = NULL;
+    //tmp_str = NULL;
     while ('\0' != line[index])
     {
 		tmp_token = (t_token *)malloc(sizeof(t_token));
