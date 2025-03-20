@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+         #
+#    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 15:32:16 by akunimot          #+#    #+#              #
-#    Updated: 2025/03/18 09:55:57 by somukaid         ###   ########.fr        #
+#    Updated: 2025/03/21 04:43:52 by akunimot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ LIBFT        = $(LIBFT_DIR)/$(LIBFT_NAME)
 SRC_DIR      = ./srcs
 OBJ_DIR      = ./objs
 
-SRCS         = $(SRC_DIR)/main.c
+SRCS         = $(SRC_DIR)/main.c \
+				$(SRC_DIR)/parser.c
 
 OBJS         = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
