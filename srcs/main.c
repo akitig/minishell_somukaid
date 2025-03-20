@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:50:37 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/18 12:16:59 by somukaid         ###   ########.fr       */
+/*   Updated: 2025/03/21 01:50:03 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ typedef enum e_token_type
 	TK_WORD,
 	TK_OP,
 	TK_EOF,
-//	TK_RESERVED
+	//	TK_RESERVED
 }						t_token_type;
 
 typedef struct s_token	t_token;
@@ -51,22 +51,70 @@ void	ft_lstadd_back_token(t_token **token, t_token *new)
 		ft_lstlast_token(*token)->next = new;
 }
 
-// metacharacterかどうか
-int	is_metachar(char c)
+static int	is_metachar(char c)
 {
-	if (c == '|' || c == '&' || c == ';' || c == '(' || c == ')' || c == '<' || c == '>' || c == ' ')
+	if (c == '|' || c == '&' || c == ';' || c == '(' || c == ')' || c == '<'
+		|| c == '>' || c == ' ')
 		return (1);
 	return (0);
 }
 
-// metacharacterの区切りごとにtmp_token->wordを作成
-void    split_token(char *input, int *index, int *word_first, char **tmp_token_word)
+/*
+** skip_quote: Advance the index until the matching quote is found.
+*/
+static void	skip_quote(char *input, int *index, char quote)
 {
-    if (input[*index] && '\0' != input[*index])
-    {
-        while (' ' == input[*index] && '\0' != input[*index])
-    	    ++(*index);
-    }
+	++(*index);
+	while (input[*index] && input[*index] != quote)
+		++(*index);
+	if (input[*index] == quote)
+		++(*index);
+}
+
+/*
+** split_token: Extract a token (operator or word) from the input string.
+*/
+static void	split_token(char *input, int *index, int *word_start,
+		char **tmp_token_word)
+{
+	while (input[*index] == ' ')
+		++(*index);
+	if (input[*index] == '\0')
+		return ;
+	if (is_metachar(input[*index]))
+	{
+		if ((input[*index + 1] == '>' || input[*index + 1] == '<')
+			&& input[*index + 1] != '\0')
+		{
+			*tmp_token_word = ft_substr(input, *index, 2);
+			++(*index);
+		}
+		else
+			*tmp_token_word = ft_substr(input, *index, 1);
+		++(*index);
+		return ;
+	}
+	*word_start = *index;
+	while (input[*index] && !is_metachar(input[*index]))
+	{
+		if (input[*index] == '"' || input[*index] == '\'')
+			skip_quote(input, index, input[*index]);
+		else
+			++(*index);
+	}
+	*tmp_token_word = ft_substr(input, *word_start, *index - *word_start);
+}
+
+/*
+// metacharacterの区切りごとにtmp_token->wordを作成
+void	split_token(char *input, int *index, int *word_first,
+		char **tmp_token_word)
+{
+	if (input[*index] && '\0' != input[*index])
+	{
+		while (' ' == input[*index] && '\0' != input[*index])
+			++(*index);
+	}
 	if (input[*index] == '\0')
 		return ;
 	if (is_metachar(input[*index]))
@@ -81,25 +129,26 @@ void    split_token(char *input, int *index, int *word_first, char **tmp_token_w
 		++(*index);
 		return ;
 	}
-    *word_first = *index;
-    while (!is_metachar(input[*index]) && '\0' != input[*index])
-    {
-        if ('"' == input[*index])
-        {
-            ++(*index);
-            while ('"' != input[*index])
-                ++(*index);
-        }
-        if ('\'' == input[*index])
-        {
-            ++(*index);
-            while ('\'' != input[*index])
-                ++(*index);
-        }
-        ++(*index);
-    }
-    *tmp_token_word = ft_substr(input, *word_first, *index - *word_first);
+	*word_first = *index;
+	while (!is_metachar(input[*index]) && '\0' != input[*index])
+	{
+		if ('"' == input[*index])
+		{
+			++(*index);
+			while ('"' != input[*index])
+				++(*index);
+		}
+		if ('\'' == input[*index])
+		{
+			++(*index);
+			while ('\'' != input[*index])
+				++(*index);
+		}
+		++(*index);
+	}
+	*tmp_token_word = ft_substr(input, *word_first, *index - *word_first);
 }
+*/
 
 // operator一覧
 char	**make_data(void)
@@ -119,13 +168,12 @@ char	**make_data(void)
 	return (op_list);
 }
 
-
 // トークンのタイプを調べてtmp_token->typeに代入
 void	assign_type(t_token **tmp_token)
 {
 	char	**op_list;
 	size_t	i;
-	
+
 	op_list = make_data();
 	i = 0;
 	while (i < 9)
@@ -146,31 +194,32 @@ void	assign_type(t_token **tmp_token)
 // tokenizeテスト１
 t_token	*tokenize(char *line)
 {
-	t_token  *token;
-    t_token  *tmp_token;
-    int             index;
-    int             word_first;
-	//char    *tmp_str;
+	t_token	*token;
+	t_token	*tmp_token;
+	int		index;
+	int		word_first;
 
-    token = NULL;
-    index = 0;
-    word_first = 0;
-    //tmp_str = NULL;
-    while ('\0' != line[index])
-    {
+	// char    *tmp_str;
+	token = NULL;
+	index = 0;
+	word_first = 0;
+	// tmp_str = NULL;
+	while ('\0' != line[index])
+	{
 		tmp_token = (t_token *)malloc(sizeof(t_token));
 		tmp_token->word = NULL;
 		tmp_token->next = NULL;
-        split_token(line, &index, &word_first, &(tmp_token->word)); // トークンごとにtmp_token->wordに代入
-        if (NULL == tmp_token->word)
+		split_token(line, &index, &word_first, &(tmp_token->word));
+		// トークンごとにtmp_token->wordに代入
+		if (NULL == tmp_token->word)
 		{
 			free(tmp_token);
-            return (token);
+			return (token);
 		}
 		assign_type(&tmp_token);
-        ft_lstadd_back_token(&token, tmp_token); //tokenにり
-    }
-    return (token);
+		ft_lstadd_back_token(&token, tmp_token); // tokenにり
+	}
+	return (token);
 }
 
 /*
