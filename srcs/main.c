@@ -6,12 +6,13 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:50:37 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/21 01:50:03 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/21 04:42:24 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
 typedef enum e_token_type
 {
 	TK_WORD,
@@ -19,7 +20,9 @@ typedef enum e_token_type
 	TK_EOF,
 	//	TK_RESERVED
 }						t_token_type;
+*/
 
+/*
 typedef struct s_token	t_token;
 
 typedef struct s_token
@@ -29,6 +32,7 @@ typedef struct s_token
 	t_token				*next;
 
 }						t_token;
+*/
 
 // t_token型のft_lstlast
 t_token	*ft_lstlast_token(t_token *token)
@@ -260,8 +264,11 @@ void	minishell(char *line)
 {
 	t_token	*token;
 	t_token	*head;
+	t_node	*node;
 
+	(void)node;
 	token = tokenize(line);
+	node = parser(token);
 	head = token;
 	// tokenを全て出力
 	while (token)
