@@ -12,119 +12,115 @@
 
 #include "../includes/minishell.h"
 
-/*
-typedef enum
+t_node	*ft_lstlast_node(t_node *node)
 {
-    delimiter,
-    pipe,
-    command,
-    argument,
-    redirection,
-}       NodeType;
-*/
+	if (node == NULL)
+		return (NULL);
+	while (node->left != NULL)
+		node = node->left;
+	return (node);
+}
 
-/*
-typedef struct  s_node
+void	ft_lstadd_back_node(t_node **node, t_node *new)
 {
-    NodeType        type;
-    struct s_node   *left;
-    struct s_node   *right;
-    char            *text;
-}               t_node;
-*/
+	if (node == NULL || new == NULL)
+		return ;
+	if (*node == NULL)
+		*node = new;
+	else
+		ft_lstlast_node(*node)->left = new;
+}
+
+t_node	*ft_lstnew_node(char *text)
+{
+	t_node	*ans;
+
+	ans = (t_node *)malloc(sizeof(t_node));
+	if (ans == NULL)
+		return (NULL);
+	ans->text = text;
+	ans->left = NULL;
+    ans->right = NULL;
+    ans->type = 0;
+	return (ans);
+}
+
+void	ft_lstadd_front_node(t_node **node, t_node *new)
+{
+	if (node == NULL || new == NULL)
+		return ;
+	new->left = *node;
+	*node = new;
+}
+
+void    print_node(t_node *node)
+{
+    if (node == NULL)
+        return ;
+    print_node(node->left);
+    if (node->text != NULL)
+        printf("%s\n", node->text);
+    print_node(node->right);
+}
 
 t_node    *parser(t_token *token)
 {
-    t_node  *node0;
-    t_node  *node1;
-    t_node  *node2;
-    t_node  *node3;
-    t_node  *node4;
-    t_node  *node5;
-    t_node  *node6;
-    t_node  *node7;
+    t_token *tmp_token;
+    t_node *root_node;
+    t_node *top_node;
+    t_node *past_top_node;
+    t_node *node;
+    int     right_flag;
+    int     first_flag;
     
-    (void)token;
-    node0 = (t_node *)malloc(sizeof(t_node));
-    
-    node0->type = delimiter;
-    node1 = (t_node *)malloc(sizeof(t_node));
-    node0->left = node1;
-    node0->right = NULL;
-    node0->text = ft_strdup(";");
-
-    node1->type = pipe_c;
-    node2 = (t_node *)malloc(sizeof(t_node));
-    node3 = (t_node *)malloc(sizeof(t_node));
-    node1->left = node2;
-    node1->right = node3;
-    node1->text = ft_strdup("|");
-    
-    node2->type = delimiter;
-    node4 = (t_node *)malloc(sizeof(t_node));
-    node5 = (t_node *)malloc(sizeof(t_node));
-    node2->left = node4;
-    node2->right = node5;
-    node2->text = ft_strdup(";");
-
-    node3->type = delimiter;
-    node6 = (t_node *)malloc(sizeof(t_node));
-    node7 = (t_node *)malloc(sizeof(t_node));
-    node3->left = node6;
-    node3->right = node7;
-    node3->text = ft_strdup(";");
-
-    node4->type = command;
-    node4->left = NULL;
-    node4->right = NULL;
-    node4->text = ft_strdup("echo");
-
-    node5->type = argument;
-    node5->left = NULL;
-    node5->right = NULL;
-    node5->text = ft_strdup("hello world");
-
-    node6->type = command;
-    node6->left = NULL;
-    node6->right = NULL;
-    node6->text = ft_strdup("cat");
-
-    node7->type = argument;
-    node7->left = NULL;
-    node7->right = NULL;
-    node7->text = ft_strdup("input.txt");
-
+    tmp_token = token;
+    root_node = NULL;
+    top_node = NULL;
+    past_top_node = NULL;
+    root_node = top_node;
+    right_flag = 0;
+    first_flag = 0;
+    while (tmp_token != NULL)
+    {
+        if (right_flag == 1)
+        {
+            node = ft_lstnew_node(tmp_token->word);
+            node->type = command;
+            if (first_flag == 0)
+            {  
+                root_node = top_node;
+                first_flag = 1;
+            }
+            past_top_node = top_node;
+            top_node->right = node;
+            top_node = node;
+            right_flag = 0;
+        }
+        else if (tmp_token->type == TK_WORD)
+        {
+            node = ft_lstnew_node(tmp_token->word);
+            node->type = command;
+            ft_lstadd_back_node(&top_node, node);            
+        }
+        else if (tmp_token->type == TK_OP)
+        {
+            node = ft_lstnew_node(tmp_token->word);
+            node->type = pipe_c;
+            ft_lstadd_front_node(&top_node, node);
+            right_flag = 1;
+            if (past_top_node != NULL)
+                past_top_node->right = node;
+        }
+        tmp_token = tmp_token->next;
+    }
     printf("----- node -----\n");
-
-	printf("%s\n", node0->text);
-	printf("%d\n", node0->type);
-    printf("%s\n", node1->text);
-	printf("%d\n", node1->type);
-    printf("%s\n", node2->text);
-	printf("%d\n", node2->type);
-    printf("%s\n", node3->text);
-	printf("%d\n", node3->type);
-    printf("%s\n", node4->text);
-	printf("%d\n", node4->type);
-    printf("%s\n", node5->text);
-	printf("%d\n", node5->type);
-    printf("%s\n", node6->text);
-	printf("%d\n", node6->type);
-    printf("%s\n", node7->text);
-	printf("%d\n", node7->type);
-
+    if (root_node != NULL)
+        print_node(root_node);
+    else
+        print_node(top_node);
     printf("----- node -----\n");
-    
-    return (node0);
+    if (root_node != NULL)
+        return (root_node);
+    else
+        return (top_node);
 }
-
-/*
-int main(void)
-{
-    t_parser    *data;
-    t_token     *token;
-
-    data = parser(token);
-    return (0);
-}
-*/
