@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:18 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/21 04:41:55 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/26 23:40:53 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@
 // Prototypes
 typedef enum
 {
-    delimiter,
-    pipe_c,
-    command,
-    argument,
-    redirection,
-}       NodeType;
+	delimiter,
+	pipe_c,
+	command,
+	argument,
+	redirection,
+}						NodeType;
 
-typedef struct  s_node
+typedef struct s_node
 {
-    NodeType        type;
-    struct s_node   *left;
-    struct s_node   *right;
-    char            *text;
-}               t_node;
+	NodeType			type;
+	struct s_node		*left;
+	struct s_node		*right;
+	char				*text;
+}						t_node;
 
 typedef enum e_token_type
 {
@@ -56,6 +56,23 @@ typedef struct s_token
 
 }						t_token;
 
-t_node    *parser(t_token *token);
+// ------- tokenize --------
+// tokenize.c
+t_token					*tokenize(char *line);
+void					free_tokens(t_token *token);
+
+// ft_token.c
+t_token					*ft_lstlast_token(t_token *token);
+void					ft_lstadd_back_token(t_token **token, t_token *new);
+
+// ------- parser -------
+// parser.c
+t_node					*parser(t_token *token);
+
+// ft_parser.c
+t_node					*ft_lstlast_node(t_node *node);
+void					ft_lstadd_back_node(t_node **node, t_node *new);
+t_node					*ft_lstnew_node(char *text);
+void					ft_lstadd_front_node(t_node **node, t_node *new);
 
 #endif // MINISHELL_H

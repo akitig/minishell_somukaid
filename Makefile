@@ -6,7 +6,7 @@
 #    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 15:32:16 by akunimot          #+#    #+#              #
-#    Updated: 2025/03/21 04:43:52 by akunimot         ###   ########.fr        #
+#    Updated: 2025/03/26 23:39:40 by akunimot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,9 @@ SRC_DIR      = ./srcs
 OBJ_DIR      = ./objs
 
 SRCS         = $(SRC_DIR)/main.c \
+				$(SRC_DIR)/ft_token.c \
+				$(SRC_DIR)/tokenize.c \
+				$(SRC_DIR)/ft_parser.c \
 				$(SRC_DIR)/parser.c
 
 OBJS         = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
