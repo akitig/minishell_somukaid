@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:18 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 13:59:08 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:10:57 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_token
 
 // ------- tokenize --------
 // tokenize.c
-t_token					*tokenize(char *line);
+t_token					*tokenize(char **line);
 void					free_tokens(t_token *token);
 
 // ft_token.c

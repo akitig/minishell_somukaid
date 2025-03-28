@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:50:37 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 13:33:09 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:12:14 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@ void	minishell(char *line)
 	t_token	*head;
 	t_node	*node;
 
-	token = tokenize(line);
+	/* Pass address of line so that tokenize() can reallocate it if needed */
+	token = tokenize(&line);
 	if (!token)
+	{
+		free(line);
 		return ;
+	}
 	node = parser(token);
 	head = token;
 	/* Debug output: print all tokens */
@@ -35,6 +39,7 @@ void	minishell(char *line)
 	}
 	print_node(node);
 	free_tokens(head);
+	free(line);
 }
 
 int	main(int ac, char **av)
@@ -52,7 +57,6 @@ int	main(int ac, char **av)
 			if (*line)
 				add_history(line);
 			minishell(line);
-			free(line);
 		}
 	}
 	else
