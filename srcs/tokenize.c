@@ -6,11 +6,12 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 02:39:38 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 13:57:25 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:05:59 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h> /* for fprintf() */
 
 static int	is_metachar(char c)
 {
@@ -22,33 +23,40 @@ static int	is_metachar(char c)
 
 /*
 ** skip_quote: Advance index until matching quote is found.
-** In double quotes, a '\' escape is supported.
+** In double quotes, '\' escape is supported.
+** Returns 0 on success, or -1 if no matching quote is found.
 */
-static void	skip_quote(char *input, int *index, char quote)
+static int	skip_quote(char *input, int *index, char quote)
 {
 	++(*index);
 	while (input[*index] && input[*index] != quote)
 	{
 		if (quote == '"' && input[*index] == '\\')
-			(*index)++;
+			++(*index);
 		++(*index);
 	}
-	if (input[*index] == quote)
-		++(*index);
+	if (input[*index] != quote)
+	{
+		fprintf(stderr, "Error: Unclosed quote detected\n");
+		return (-1);
+	}
+	++(*index);
+	return (0);
 }
 
 /*
 ** split_token: Extract one token (operator or word) from input.
-** Handles redirection operators (">", ">>", "<", "<<") and
-** escape characters (using '\' to treat next char as literal).
+** Handles redirection operators (">", ">>", "<", "<<") and escape
+** characters (using '\' to treat next char as literal).
+** Returns 0 on success, or -1 on error (e.g. unclosed quote).
 */
-static void	split_token(char *input, int *index, int *word_start,
+static int	split_token(char *input, int *index, int *word_start,
 		char **tmp_token_word)
 {
 	while (input[*index] == ' ')
 		++(*index);
 	if (input[*index] == '\0')
-		return ;
+		return (0);
 	if (is_metachar(input[*index]))
 	{
 		/* Handle redirection operators: >> or << */
@@ -63,7 +71,7 @@ static void	split_token(char *input, int *index, int *word_start,
 			*tmp_token_word = ft_substr(input, *index, 1);
 			++(*index);
 		}
-		return ;
+		return (0);
 	}
 	*word_start = *index;
 	while (input[*index] && !is_metachar(input[*index]))
@@ -75,12 +83,20 @@ static void	split_token(char *input, int *index, int *word_start,
 				++(*index);
 		}
 		else if (input[*index] == '"' || input[*index] == '\'')
-			skip_quote(input, index, input[*index]);
+		{
+			if (skip_quote(input, index, input[*index]) == -1)
+				return (-1);
+		}
 		else
 			++(*index);
 	}
 	*tmp_token_word = ft_substr(input, *word_start, *index - *word_start);
+	return (0);
 }
+
+/*
+** make_data: Returns an array of operator strings.
+*/
 char	**make_data(void)
 {
 	char	**op_list;
@@ -104,6 +120,9 @@ char	**make_data(void)
 	return (op_list);
 }
 
+/*
+** assign_type: Set token type based on word.
+*/
 void	assign_type(t_token **tmp_token)
 {
 	char	**op_list;
@@ -135,6 +154,8 @@ void	assign_type(t_token **tmp_token)
 
 /*
 ** tokenize: Splits the input line into a linked list of tokens.
+** If an error is detected (e.g. unclosed quote), frees allocated tokens
+** and returns NULL.
 */
 t_token	*tokenize(char *line)
 {
@@ -142,6 +163,7 @@ t_token	*tokenize(char *line)
 	t_token	*tmp_token;
 	int		index;
 	int		word_first;
+	int		ret;
 
 	token = NULL;
 	index = 0;
@@ -153,7 +175,14 @@ t_token	*tokenize(char *line)
 			return (token);
 		tmp_token->word = NULL;
 		tmp_token->next = NULL;
-		split_token(line, &index, &word_first, &(tmp_token->word));
+		ret = split_token(line, &index, &word_first, &(tmp_token->word));
+		if (ret == -1)
+		{
+			free(tmp_token->word);
+			free(tmp_token);
+			free_tokens(token);
+			return (NULL);
+		}
 		if (!tmp_token->word || tmp_token->word[0] == '\0')
 		{
 			free(tmp_token->word);
