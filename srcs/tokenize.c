@@ -6,12 +6,17 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 02:39:38 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 13:23:08 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:13:35 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>  /* for fprintf() */
+#include <unistd.h> /* for isatty() */
 
+/*
+** is_metachar: Returns 1 if c is a metacharacter.
+*/
 static int	is_metachar(char c)
 {
 	if (c == '|' || c == '&' || c == ';' || c == '(' || c == ')' || c == '<'
@@ -22,48 +27,105 @@ static int	is_metachar(char c)
 
 /*
 ** skip_quote: Advance index until matching quote is found.
+** In double quotes, '\' escape is supported.
+** If end of input is reached without closing quote and
+** if in interactive mode, PS2 prompt is shown to read additional input.
+** Returns 0 on success, or -1 on error.
 */
-static void	skip_quote(char *input, int *index, char quote)
+static int	skip_quote(char **input, int *index, char quote)
 {
-	++(*index);
-	while (input[*index] && input[*index] != quote)
+	char	*tmp;
+	char	*add_line;
+	char	*joined;
+
+	++(*index); /* skip opening quote */
+	while ((*input)[*index] && (*input)[*index] != quote)
+	{
+		if (quote == '"' && (*input)[*index] == '\\')
+			++(*index);
 		++(*index);
-	if (input[*index] == quote)
-		++(*index);
+		/* もし入力が終了していたら */
+		if ((*input)[*index] == '\0')
+		{
+			if (isatty(STDIN_FILENO))
+			{
+				add_line = readline("PS2 > ");
+				if (!add_line)
+				{
+					fprintf(stderr, "Error: Unexpected EOF during quote\n");
+					return (-1);
+				}
+				/* 現在の入力に改行と追加入力を連結 */
+				tmp = ft_strjoin(*input, "\n");
+				joined = ft_strjoin(tmp, add_line);
+				free(tmp);
+				free(add_line);
+				free(*input);
+				*input = joined;
+			}
+			else
+			{
+				fprintf(stderr, "Error: Unclosed quote detected\n");
+				return (-1);
+			}
+		}
+	}
+	if ((*input)[*index] != quote)
+	{
+		fprintf(stderr, "Error: Unclosed quote detected\n");
+		return (-1);
+	}
+	++(*index); /* skip closing quote */
+	return (0);
 }
 
 /*
 ** split_token: Extract one token (operator or word) from input.
+** Handles redirection operators (">", ">>", "<", "<<") and escape
+** characters (using '\' to treat the next character as literal).
+** Returns 0 on success, or -1 on error (e.g. unclosed quote).
 */
-static void	split_token(char *input, int *index, int *word_start,
+static int	split_token(char **input, int *index, int *word_start,
 		char **tmp_token_word)
 {
-	while (input[*index] == ' ')
+	while ((*input)[*index] == ' ')
 		++(*index);
-	if (input[*index] == '\0')
-		return ;
-	if (is_metachar(input[*index]))
+	if ((*input)[*index] == '\0')
+		return (0);
+	if (is_metachar((*input)[*index]))
 	{
-		if (input[*index + 1] && ((input[*index + 1] == '>') || (input[*index
-					+ 1] == '<')))
+		if (((*input)[*index] == '>' || (*input)[*index] == '<')
+			&& (*input)[*index + 1] && (*input)[*index + 1] == (*input)[*index])
 		{
-			*tmp_token_word = ft_substr(input, *index, 2);
-			++(*index);
+			*tmp_token_word = ft_substr(*input, *index, 2);
+			*index += 2;
 		}
 		else
-			*tmp_token_word = ft_substr(input, *index, 1);
-		++(*index);
-		return ;
+		{
+			*tmp_token_word = ft_substr(*input, *index, 1);
+			++(*index);
+		}
+		return (0);
 	}
 	*word_start = *index;
-	while (input[*index] && !is_metachar(input[*index]))
+	while ((*input)[*index] && !is_metachar((*input)[*index]))
 	{
-		if (input[*index] == '"' || input[*index] == '\'')
-			skip_quote(input, index, input[*index]);
+		if ((*input)[*index] == '\\')
+		{
+			++(*index);
+			if ((*input)[*index])
+				++(*index);
+		}
+		else if ((*input)[*index] == '"' || (*input)[*index] == '\'')
+		{
+			if (skip_quote(input, index, (*input)[*index]) == -1)
+				return (-1);
+		}
 		else
 			++(*index);
 	}
-	*tmp_token_word = ft_substr(input, *word_start, *index - *word_start);
+	*tmp_token_word = ft_substr(*input, *word_start, *index - *word_start);
+	return (0);
 }
 
 /*
@@ -73,7 +135,7 @@ char	**make_data(void)
 {
 	char	**op_list;
 
-	op_list = (char **)malloc(sizeof(char *) * 9);
+	op_list = (char **)malloc(sizeof(char *) * 13);
 	if (!op_list)
 		return (NULL);
 	op_list[0] = "||";
@@ -85,6 +147,10 @@ char	**make_data(void)
 	op_list[6] = ")";
 	op_list[7] = "|";
 	op_list[8] = "|&";
+	op_list[9] = "<";
+	op_list[10] = ">";
+	op_list[11] = "<<";
+	op_list[12] = ">>";
 	return (op_list);
 }
 
@@ -100,17 +166,20 @@ void	assign_type(t_token **tmp_token)
 	if (!op_list)
 		return ;
 	i = 0;
-	while (i < 9)
+	while (i < 13)
 	{
 		if (!ft_strncmp((*tmp_token)->word, op_list[i], ft_strlen(op_list[i])
 				+ 1))
 		{
-			(*tmp_token)->type = TK_OP;
+			if (i >= 9)
+				(*tmp_token)->type = TK_REDIR;
+			else
+				(*tmp_token)->type = TK_OP;
 			break ;
 		}
 		++i;
 	}
-	if (i == 9)
+	if (i == 13)
 		(*tmp_token)->type = TK_WORD;
 	if (((*tmp_token)->word)[0] == ';')
 		(*tmp_token)->type = TK_SEMICOLON;
@@ -120,24 +189,32 @@ void	assign_type(t_token **tmp_token)
 /*
 ** tokenize: Splits the input line into a linked list of tokens.
 */
-t_token	*tokenize(char *line)
+t_token	*tokenize(char **line)
 {
 	t_token	*token;
 	t_token	*tmp_token;
 	int		index;
 	int		word_first;
+	int		ret;
 
 	token = NULL;
 	index = 0;
 	word_first = 0;
-	while (line[index] != '\0')
+	while ((*line)[index] != '\0')
 	{
 		tmp_token = (t_token *)malloc(sizeof(t_token));
 		if (!tmp_token)
 			return (token);
 		tmp_token->word = NULL;
 		tmp_token->next = NULL;
-		split_token(line, &index, &word_first, &(tmp_token->word));
+		ret = split_token(line, &index, &word_first, &(tmp_token->word));
+		if (ret == -1)
+		{
+			free(tmp_token->word);
+			free(tmp_token);
+			free_tokens(token);
+			return (NULL);
+		}
 		if (!tmp_token->word || tmp_token->word[0] == '\0')
 		{
 			free(tmp_token->word);
