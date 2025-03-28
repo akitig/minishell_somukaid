@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 23:38:35 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/26 23:40:07 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/27 00:35:46 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_node	*ft_lstnew_node(char *text)
 	new_node = (t_node *)malloc(sizeof(t_node));
 	if (!new_node)
 		return (NULL);
-	new_node->text = text;
+	new_node->value = text;
 	new_node->left = NULL;
 	new_node->right = NULL;
 	new_node->type = 0;

@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:50:37 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/26 23:16:26 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:33:09 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,33 @@ void	minishell(char *line)
 	t_token	*head;
 	t_node	*node;
 
-	(void)node;
 	token = tokenize(line);
+	if (!token)
+		return ;
 	node = parser(token);
 	head = token;
-	// tokenを全て出力
+	/* Debug output: print all tokens */
 	while (token)
 	{
-		printf("%s\n", token->word);
+		if (token->word)
+			printf("%s\n", token->word);
+		else
+			printf("(null)\n");
 		printf("%d\n", token->type);
 		token = token->next;
 	}
+	print_node(node);
 	free_tokens(head);
 }
 
 int	main(int ac, char **av)
 {
-	char *line;
-	char *prompt = "minishell > ";
+	char	*line;
+	char	*prompt;
 
+	prompt = "minishell > ";
 	(void)ac;
 	(void)av;
-
-	// prompt に打たれた文字列をそのまま表示する
-
-	// ./minishell
 	if (isatty(fileno(stdin)))
 	{
 		while ((line = readline(prompt)))
@@ -53,14 +55,10 @@ int	main(int ac, char **av)
 			free(line);
 		}
 	}
-	//	echo "hello" | ./minishell
 	else
 	{
 		while ((line = get_next_line(0)) != NULL)
 		{
-			// TODO:ttyって使うのかなー　存在するってなんだろー
-			// echo "/usr/bin/cat main.c" | /bin/bash
-
 			ft_putstr_fd(line, 1);
 			free(line);
 		}

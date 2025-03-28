@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 02:34:07 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/26 23:39:00 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:32:12 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,72 +14,158 @@
 
 void	print_node(t_node *node)
 {
-	if (node == NULL)
+	if (!node)
 		return ;
 	print_node(node->left);
-	if (node->text != NULL)
-		printf("%s\n", node->text);
+	if (node->value)
+		printf("node: %s, type: %d\n", node->value, node->type);
 	print_node(node->right);
 }
 
+static t_node	*new_ast_node(char *value, int type)
+{
+	t_node	*node;
+
+	node = malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
+	node->value = value;
+	node->type = type;
+	node->left = NULL;
+	node->right = NULL;
+	return (node);
+}
+
+/*
+** Joins successive TK_WORD tokens into one command string.
+** Updates *tok to the first token after the command.
+*/
+static char	*join_command_words(t_token **tok)
+{
+	int		total_len;
+	t_token	*current;
+	int		index;
+	char	*cmd;
+
+	total_len = 0;
+	current = *tok;
+	while (current && current->type == TK_WORD)
+	{
+		if (current->word)
+			total_len += ft_strlen(current->word);
+		total_len++; /* for space or terminator */
+		current = current->next;
+	}
+	if (total_len == 0)
+		return (NULL);
+	cmd = malloc(sizeof(char) * total_len);
+	if (!cmd)
+		return (NULL);
+	index = 0;
+	current = *tok;
+	while (current && current->type == TK_WORD)
+	{
+		if (current->word)
+		{
+			ft_strcpy(cmd + index, current->word);
+			index += ft_strlen(current->word);
+		}
+		if (current->next && current->next->type == TK_WORD)
+			cmd[index++] = ' ';
+		current = current->next;
+	}
+	cmd[index] = '\0';
+	*tok = current;
+	return (cmd);
+}
+
+/*
+** Parses a command from successive TK_WORD tokens.
+*/
+static t_node	*parse_command(t_token **tok)
+{
+	char	*cmd_str;
+	t_node	*node;
+
+	if (!tok || !*tok)
+		return (NULL);
+	if ((*tok)->type != TK_WORD)
+		return (NULL);
+	cmd_str = join_command_words(tok);
+	if (!cmd_str)
+		return (NULL);
+	node = new_ast_node(cmd_str, ND_COMMAND);
+	return (node);
+}
+
+/*
+** Parses a pipeline: command ('|' command)* .
+** After a pipe operator, call parse_command() to get the next command.
+*/
+static t_node	*parse_pipe(t_token **tok)
+{
+	t_node	*left;
+	t_node	*node;
+	t_node	*right;
+
+	left = parse_command(tok);
+	if (!left)
+		return (NULL);
+	while (*tok && (*tok)->type == TK_OP)
+	{
+		*tok = (*tok)->next;
+		right = parse_command(tok);
+		if (!right)
+			break ;
+		node = new_ast_node("|", ND_PIPE);
+		if (!node)
+			return (left);
+		node->left = left;
+		node->right = right;
+		left = node;
+	}
+	return (left);
+}
+
+/*
+** Parses a sequence: pipeline (';' pipeline)* .
+** If a semicolon is found without a following pipeline, break.
+*/
+static t_node	*parse_sequence(t_token **tok)
+{
+	t_node	*left;
+	t_node	*node;
+	t_node	*right;
+
+	left = parse_pipe(tok);
+	if (!left)
+		return (NULL);
+	while (*tok && (*tok)->type == TK_SEMICOLON)
+	{
+		*tok = (*tok)->next;
+		right = parse_pipe(tok);
+		if (!right)
+			break ;
+		node = new_ast_node(";", ND_SEQ);
+		if (!node)
+			return (left);
+		node->left = left;
+		node->right = right;
+		left = node;
+	}
+	return (left);
+}
+
+/*
+** parser: The parser entry point.
+** Uses a local copy of the token pointer to avoid modifying the original.
+*/
 t_node	*parser(t_token *token)
 {
-	t_token *tmp_token;
-	t_node *root_node;
-	t_node *top_node;
-	t_node *past_top_node;
-	t_node *node;
-	int right_flag;
-	int first_flag;
+	t_node	*ast;
+	t_token	*tmp;
 
-	tmp_token = token;
-	root_node = NULL;
-	top_node = NULL;
-	past_top_node = NULL;
-	root_node = top_node;
-	right_flag = 0;
-	first_flag = 0;
-	while (tmp_token != NULL)
-	{
-		if (right_flag == 1)
-		{
-			node = ft_lstnew_node(tmp_token->word);
-			node->type = command;
-			if (first_flag == 0)
-			{
-				root_node = top_node;
-				first_flag = 1;
-			}
-			past_top_node = top_node;
-			top_node->right = node;
-			top_node = node;
-			right_flag = 0;
-		}
-		else if (tmp_token->type == TK_WORD)
-		{
-			node = ft_lstnew_node(tmp_token->word);
-			node->type = command;
-			ft_lstadd_back_node(&top_node, node);
-		}
-		else if (tmp_token->type == TK_OP)
-		{
-			node = ft_lstnew_node(tmp_token->word);
-			node->type = pipe_c;
-			ft_lstadd_front_node(&top_node, node);
-			right_flag = 1;
-			if (past_top_node != NULL)
-				past_top_node->right = node;
-		}
-		tmp_token = tmp_token->next;
-	}
-	printf("----- node -----\n");
-	if (root_node != NULL)
-		print_node(root_node);
-	else
-		print_node(top_node);
-	printf("----- node -----\n");
-	if (root_node != NULL)
-		return (root_node);
-	else
-		return (top_node);
+	tmp = token;
+	ast = parse_sequence(&tmp);
+	return (ast);
 }

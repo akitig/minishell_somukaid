@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 02:39:38 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/26 23:26:37 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:23:08 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static int	is_metachar(char c)
 		return (1);
 	return (0);
 }
+
 /*
-** skip_quote: Advance the index until the matching quote is found.
+** skip_quote: Advance index until matching quote is found.
 */
 static void	skip_quote(char *input, int *index, char quote)
 {
@@ -32,7 +33,7 @@ static void	skip_quote(char *input, int *index, char quote)
 }
 
 /*
-** split_token: Extract a token (operator or word) from the input string.
+** split_token: Extract one token (operator or word) from input.
 */
 static void	split_token(char *input, int *index, int *word_start,
 		char **tmp_token_word)
@@ -43,8 +44,8 @@ static void	split_token(char *input, int *index, int *word_start,
 		return ;
 	if (is_metachar(input[*index]))
 	{
-		if ((input[*index + 1] == '>' || input[*index + 1] == '<')
-			&& input[*index + 1] != '\0')
+		if (input[*index + 1] && ((input[*index + 1] == '>') || (input[*index
+					+ 1] == '<')))
 		{
 			*tmp_token_word = ft_substr(input, *index, 2);
 			++(*index);
@@ -65,12 +66,16 @@ static void	split_token(char *input, int *index, int *word_start,
 	*tmp_token_word = ft_substr(input, *word_start, *index - *word_start);
 }
 
-// operator一覧
+/*
+** make_data: Returns an array of operator strings.
+*/
 char	**make_data(void)
 {
 	char	**op_list;
 
 	op_list = (char **)malloc(sizeof(char *) * 9);
+	if (!op_list)
+		return (NULL);
 	op_list[0] = "||";
 	op_list[1] = "&";
 	op_list[2] = "&&";
@@ -83,7 +88,9 @@ char	**make_data(void)
 	return (op_list);
 }
 
-// トークンのタイプを調べてtmp_token->typeに代入
+/*
+** assign_type: Set token type based on word.
+*/
 void	assign_type(t_token **tmp_token)
 {
 	char	**op_list;
@@ -95,7 +102,8 @@ void	assign_type(t_token **tmp_token)
 	i = 0;
 	while (i < 9)
 	{
-		if (!ft_strncmp((*tmp_token)->word, op_list[i], ft_strlen(op_list[i])))
+		if (!ft_strncmp((*tmp_token)->word, op_list[i], ft_strlen(op_list[i])
+				+ 1))
 		{
 			(*tmp_token)->type = TK_OP;
 			break ;
@@ -105,10 +113,13 @@ void	assign_type(t_token **tmp_token)
 	if (i == 9)
 		(*tmp_token)->type = TK_WORD;
 	if (((*tmp_token)->word)[0] == ';')
-		(*tmp_token)->type = TK_EOF; //今のところ、明示的に;があるときだけ
+		(*tmp_token)->type = TK_SEMICOLON;
+	free(op_list);
 }
 
-// tokenizeテスト１
+/*
+** tokenize: Splits the input line into a linked list of tokens.
+*/
 t_token	*tokenize(char *line)
 {
 	t_token	*token;
@@ -119,7 +130,7 @@ t_token	*tokenize(char *line)
 	token = NULL;
 	index = 0;
 	word_first = 0;
-	while ('\0' != line[index])
+	while (line[index] != '\0')
 	{
 		tmp_token = (t_token *)malloc(sizeof(t_token));
 		if (!tmp_token)
@@ -127,20 +138,24 @@ t_token	*tokenize(char *line)
 		tmp_token->word = NULL;
 		tmp_token->next = NULL;
 		split_token(line, &index, &word_first, &(tmp_token->word));
-		// トークンごとにtmp_token->wordに代入
-		if (tmp_token->word == NULL)
+		if (!tmp_token->word || tmp_token->word[0] == '\0')
 		{
+			free(tmp_token->word);
 			free(tmp_token);
-			return (token);
+			continue ;
 		}
 		assign_type(&tmp_token);
-		ft_lstadd_back_token(&token, tmp_token); // tokenにり
+		ft_lstadd_back_token(&token, tmp_token);
 	}
 	return (token);
 }
+
+/*
+** free_tokens: Frees the token list.
+*/
 void	free_tokens(t_token *token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (token)
 	{
