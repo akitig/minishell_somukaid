@@ -6,7 +6,7 @@
 #    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/16 08:44:44 by akunimot          #+#    #+#              #
-#    Updated: 2025/02/14 23:41:09 by akunimot         ###   ########.fr        #
+#    Updated: 2025/03/27 00:30:24 by akunimot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRCS      = lib/ft_isalpha.c \
             lib/ft_lstsize.c \
             lib/ft_lstdelone.c \
             lib/ft_atol.c \
+            lib/ft_strcpy.c \
 
 SRCPF   =   printf/ft_printf.c \
 			printf/ft_printf_csp.c \

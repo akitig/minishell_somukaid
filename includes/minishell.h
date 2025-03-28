@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:18 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/26 23:40:53 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/27 00:34:20 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,28 @@
 # include <readline/readline.h>
 
 // Prototypes
-typedef enum
+typedef enum e_node_type
 {
-	delimiter,
-	pipe_c,
-	command,
-	argument,
-	redirection,
-}						NodeType;
+	// ND_SEMICOLON,
+	ND_PIPE,
+	ND_COMMAND,
+	ND_SEQ,
+}						t_node_type;
 
 typedef struct s_node
 {
-	NodeType			type;
+	char				*value;
+	int					type;
 	struct s_node		*left;
 	struct s_node		*right;
-	char				*text;
+
 }						t_node;
 
 typedef enum e_token_type
 {
 	TK_WORD,
 	TK_OP,
-	TK_EOF,
+	TK_SEMICOLON,
 	//	TK_RESERVED
 }						t_token_type;
 
@@ -68,6 +68,7 @@ void					ft_lstadd_back_token(t_token **token, t_token *new);
 // ------- parser -------
 // parser.c
 t_node					*parser(t_token *token);
+void					print_node(t_node *node);
 
 // ft_parser.c
 t_node					*ft_lstlast_node(t_node *node);
