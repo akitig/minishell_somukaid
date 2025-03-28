@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:18 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/27 00:34:20 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:59:08 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef enum e_node_type
 	ND_PIPE,
 	ND_COMMAND,
 	ND_SEQ,
+	ND_REDIR,
+	ND_FILE,
 }						t_node_type;
 
 typedef struct s_node
@@ -43,6 +45,7 @@ typedef enum e_token_type
 	TK_WORD,
 	TK_OP,
 	TK_SEMICOLON,
+	TK_REDIR,
 	//	TK_RESERVED
 }						t_token_type;
 

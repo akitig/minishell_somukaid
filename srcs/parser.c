@@ -6,7 +6,7 @@
 /*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 02:34:07 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 13:32:12 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:59:20 by akunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,19 @@ static char	*join_command_words(t_token **tok)
 }
 
 /*
-** Parses a command from successive TK_WORD tokens.
+** Parses a command from successive tokens.
+** After parsing the command name and arguments, if a redirection token
+** (TK_REDIR) is found, a redirection AST node (ND_REDIR) is created,
+** with left child holding the current command and right child holding
+** the redirection target (ND_FILE node).
 */
 static t_node	*parse_command(t_token **tok)
 {
 	char	*cmd_str;
 	t_node	*node;
+	t_node	*redir_node;
+	t_node	*file_node;
+	char	*redir_op;
 
 	if (!tok || !*tok)
 		return (NULL);
@@ -95,6 +102,21 @@ static t_node	*parse_command(t_token **tok)
 	if (!cmd_str)
 		return (NULL);
 	node = new_ast_node(cmd_str, ND_COMMAND);
+	while (*tok && (*tok)->type == TK_REDIR)
+	{
+		/* Save redirection operator token value */
+		redir_op = (*tok)->word;
+		*tok = (*tok)->next;
+		if (!*tok || (*tok)->type != TK_WORD)
+			break ;
+		/* Create file node for the redirection target */
+		file_node = new_ast_node((*tok)->word, ND_FILE);
+		*tok = (*tok)->next;
+		redir_node = new_ast_node(redir_op, ND_REDIR);
+		redir_node->left = node;
+		redir_node->right = file_node;
+		node = redir_node;
+	}
 	return (node);
 }
 
