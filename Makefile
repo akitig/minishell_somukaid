@@ -27,7 +27,8 @@ SRCS         = $(SRC_DIR)/main.c \
 				$(SRC_DIR)/ft_token.c \
 				$(SRC_DIR)/tokenize.c \
 				$(SRC_DIR)/ft_parser.c \
-				$(SRC_DIR)/parser.c
+				$(SRC_DIR)/parser.c \
+				$(SRC_DIR)/expansion.c \
 
 OBJS         = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

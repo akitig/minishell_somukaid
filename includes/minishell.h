@@ -79,4 +79,8 @@ void					ft_lstadd_back_node(t_node **node, t_node *new);
 t_node					*ft_lstnew_node(char *text);
 void					ft_lstadd_front_node(t_node **node, t_node *new);
 
+// ------- expansion -------
+// expansion.c
+void    expansion(t_node **node);
+
 #endif // MINISHELL_H
