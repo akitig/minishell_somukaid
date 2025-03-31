@@ -38,6 +38,9 @@ void	minishell(char *line)
 		token = token->next;
 	}
 	print_node(node);
+	expansion(&node);
+	printf("----- After expansion -----\n");
+	print_node(node);
 	free_tokens(head);
 	free(line);
 }
