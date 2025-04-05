@@ -1,173 +1,258 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_advance.c                                :+:      :+:    :+:   */
+/*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 22:41:21 by somukaid          #+#    #+#             */
-/*   Updated: 2025/03/28 22:41:26 by somukaid         ###   ########.fr       */
+/*   Updated: 2025/04/05 22:41:55 by somukaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*three_strjoin(char *first_str, char *env_str, char *second_str)
+static char	*extract_prefix(const char *str, int end)
+/*
+ * Extracts the substring from the beginning of the string up to the given index.
+ *
+ * @param str The original string.
+ * @param end The index to end extraction (not inclusive).
+ * @return The extracted prefix string, or NULL if end is 0.
+ */
 {
-	char	*mix_str;
-	char	*tmp_str;
-
-	mix_str = NULL;
-	tmp_str = NULL;
-	if (NULL == first_str && NULL == env_str && NULL == second_str)
+	if (end == 0)
 		return (NULL);
-	if (NULL != first_str && NULL != env_str)
+	return (ft_substr(str, 0, end));
+}
+
+static char	*extract_key(const char *str, int *i)
+/*
+ * Extracts an alphanumeric environment variable key from the string.
+ *
+ * @param str The original string.
+ * @param i Pointer to the current index; updated after key extraction.
+ * @return The extracted key string.
+ */
+{
+	int	start;
+
+	start = ++(*i);
+	while (ft_isalnum(str[*i]))
+		(*i)++;
+	return (ft_substr(str, start, *i - start));
+}
+
+static char	*extract_suffix(const char *str, int start)
+/*
+ * Extracts the remaining substring starting from a given index.
+ *
+ * @param str The original string.
+ * @param start The index to start extraction.
+ * @return The extracted suffix string, or NULL if the rest is empty.
+ */
+{
+	if (str[start] == '\0')
+		return (NULL);
+	return (ft_substr(str, start, ft_strlen(str) - start));
+}
+
+static char	*get_env_value(const char *key)
+/*
+ * Gets the value of an environment variable by key.
+ *
+ * @param key The environment variable key.
+ * @return A duplicated string of the variable's value, or NULL if not found.
+ */
+{
+	const char	*value;
+
+	if (!key)
+		return (NULL);
+	value = getenv(key);
+	if (value)
+		return (ft_strdup(value));
+	else
+		return (NULL);
+}
+
+static char	*join_first_and_middle(char *first, char *middle)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (first && middle)
 	{
-		tmp_str = ft_strjoin(first_str, env_str);
-		if (NULL == tmp_str)
-			return (NULL);
-		free(first_str);
-		free(env_str);
+		tmp = ft_strjoin(first, middle);
+		free(first);
+		free(middle);
 	}
-	else if (NULL == first_str && NULL == env_str)
+	else if (first)
 	{
-		tmp_str = NULL;
+		tmp = ft_strdup(first);
+		free(first);
 	}
-	else if (NULL == first_str)
+	else if (middle)
 	{
-		tmp_str = ft_strdup(env_str);
-		if (NULL == tmp_str)
-			return (NULL);
-		free(env_str);
+		tmp = ft_strdup(middle);
+		free(middle);
 	}
-	else if (NULL == env_str)
+	return (tmp);
+}
+
+static char	*join_temp_and_last(char *tmp, char *last)
+{
+	char	*mix;
+
+	mix = NULL;
+	if (tmp && last)
 	{
-		tmp_str = ft_strdup(first_str);
-		if (NULL == tmp_str)
-			return (NULL);
-		free(first_str);
+		mix = ft_strjoin(tmp, last);
+		free(tmp);
+		free(last);
 	}
-	if (NULL != tmp_str && NULL != second_str)
+	else if (!tmp && last)
 	{
-		mix_str = ft_strjoin(tmp_str, second_str);
-		if (NULL == mix_str)
-			return (NULL);
-		free(tmp_str);
-		free(second_str);
+		mix = ft_strdup(last);
+		free(last);
 	}
-	else if (NULL == tmp_str)
-	{
-		mix_str = ft_strdup(second_str);
-		if (NULL == mix_str)
-			return (NULL);
-		free(second_str);
-	}
-	else if (NULL == second_str)
-		mix_str = tmp_str;
-	return (mix_str);
+	else
+		mix = tmp;
+	return (mix);
+}
+
+char	*three_strjoin(char *first, char *middle, char *last)
+{
+	char	*tmp;
+	char	*result;
+
+	if (!first && !middle && !last)
+		return (NULL);
+	tmp = join_first_and_middle(first, middle);
+	result = join_temp_and_last(tmp, last);
+	return (result);
 }
 
 int	name2value_main(char **str, int i)
+/*
+ * Main routine to extract and replace a variable name with its value.
+ *
+ * @param str Pointer to the string containing a variable reference.
+ * @param i Index where the '$' character is located.
+ * @return Always returns 0.
+ */
 {
-	char	*first_str;
-	char	*env_words_and_mix_str;	
-	char	*env_str;
-	char	*second_str;
-	int		start;
+	char	*first;
+	char	*key;
+	char	*env;
+	char	*last;
+	char	*joined;
 
-	if (0 != i)
-	{
-		first_str = ft_substr(*str, 0, i);
-		if (NULL == first_str)
-			return (1);
-	}
-	else
-		first_str = NULL;
-	++i;
-	start = i;
-	while (ft_isalnum((*str)[i]))
-		++i;
-	if (i != start)
-	{
-		env_words_and_mix_str = ft_substr(*str, start, i - start);
-		if (NULL == env_words_and_mix_str)
-			return (1);
-		if (NULL != getenv(env_words_and_mix_str))
-		{
-			env_str = ft_strdup(getenv(env_words_and_mix_str));
-			if (NULL == env_str)
-				return (1);
-			free(env_words_and_mix_str);
-		}
-		else
-			env_str = NULL;
-	}
-	else
-	{
-		env_words_and_mix_str = NULL;
-		env_str = NULL;
-	}
-	if ('\0' != (*str)[i])
-	{
-		second_str = ft_substr(*str, i, (int)ft_strlen(*str) - i);
-		if (NULL == second_str)
-			return (1);
-	}
-	else
-		second_str = NULL;
-	env_words_and_mix_str = three_strjoin(first_str, env_str, second_str);
-	if (NULL == env_words_and_mix_str)
-		env_words_and_mix_str = ft_strdup("\0");
+	first = extract_prefix(*str, i);
+	key = extract_key(*str, &i);
+	env = get_env_value(key);
+	last = extract_suffix(*str, i);
+	free(key);
+	joined = three_strjoin(first, env, last);
+	if (!joined)
+		joined = ft_strdup("");
 	free(*str);
-	*str = env_words_and_mix_str;
-	return (0);
+	*str = joined;
+	return (1);
 }
 
 int	question2return_value(char **str, int i)
+/*
+ * Handles the special variable `$?` by replacing it with the last exit code.
+ *
+ * @param str Pointer to the string.
+ * @param i Index where the '$' character is located.
+ * @return 3 on success, 1 on failure.
+ */
 {
 	int	ret;
 
 	ret = name2value_main(str, i);
-	if (1 == ret)
+	if (ret)
 		return (1);
-	return (3);
+	else
+		return (3);
 }
 
 int	name2value(char **str, int i)
+/*
+ * Checks for a valid environment variable after '$' and replaces it.
+ *
+ * @param str Pointer to the string.
+ * @param i Current index to check.
+ * @return 2 if replaced, 3 if `$?`, or 0 if not applicable.
+ */
 {
 	int	ret;
 
-	if ('$' == (*str)[i] && ft_isalnum((*str)[i + 1]))
+	if ((*str)[i] == '$')
 	{
-		ret = name2value_main(str, i);
-		if (1 == ret)
-			return (1);
-		return (2);
-	}
-	if ('$' == (*str)[i])
-	{
-		if ('?' == (*str)[i + 1])
+		if (ft_isalnum((*str)[i + 1]))
 		{
-			ret = question2return_value(str, i);
-			return (2);
+			ret = name2value_main(str, i);
+			if (ret)
+				return (1);
+			else
+				return (3);
 		}
+		if ((*str)[i + 1] == '?')
+			return (question2return_value(str, i));
 	}
 	return (0);
 }
 
+static void	skip_single_quote(const char *str, int *i)
+/*
+ * Skips over characters inside a single quote pair.
+ *
+ * @param str The original string.
+ * @param i Pointer to the current index; updated after skipping.
+ */
+{
+	(*i)++;
+	while (str[*i] && str[*i] != '\'')
+		(*i)++;
+}
+
+static void	skip_double_quote_and_expand(char **str, int *i)
+/*
+ * Skips characters inside double quotes and performs variable expansion.
+ *
+ * @param str Pointer to the string.
+ * @param i Pointer to the current index; updated after processing.
+ */
+{
+	(*i)++;
+	while ((*str)[*i] && (*str)[*i] != '"')
+	{
+		if (name2value(str, *i) == 2)
+			continue ;
+		(*i)++;
+	}
+}
+
 int	dollar2env(t_node *node)
+/*
+ * Recursively processes a syntax tree node to replace all `$variables`.
+ *
+ * @param node Pointer to the root node.
+ * @return Always returns 0.
+ */
 {
 	char	*str;
 	int		i;
 	int		ret;
 
-	if (node == NULL)
-	{
+	if (!node)
 		return (0);
-	}
 	str = (char *)node->value;
 	i = 0;
-	while (str[i] != '\0')
+	while (str[i])
 	{
 		ret = name2value(&str, i);
 		if (ret == 3)
@@ -175,123 +260,99 @@ int	dollar2env(t_node *node)
 		if (ret == 2)
 			continue ;
 		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] != '\'')
-				i++;
-		}
-		if (str[i] == '"')
-		{
-			i++;
-			while (str[i] != '"')
-			{
-				ret = name2value(&str, i);
-				if (ret == 2)
-					continue ;
-				i++;
-			}
-		}
+			skip_single_quote(str, &i);
+		else if (str[i] == '"')
+			skip_double_quote_and_expand(&str, &i);
 		i++;
 	}
 	node->value = (void *)str;
-	if (node->left)
-		dollar2env(node->left);
-	if (node->right)
-		dollar2env(node->right);
+	dollar2env(node->left);
+	dollar2env(node->right);
 	return (0);
 }
 
-void	remove_quotes_single(char **str)
+static void	remove_quote_at(char **str, char quote)
+/*
+ * Removes the first occurrence of a specific quote character from a string.
+ *
+ * @param str Pointer to the string.
+ * @param quote The quote character to remove (' or ").
+ */
 {
-	char	*tmp_str;
-	char	*front_str;
-	char	*back_str;
-	size_t	i;
+	char	*pos;
+	size_t	idx;
+	char	*front;
+	char	*back;
+	char	*joined;
 
-	if (*str == NULL)
-		return ;
-	tmp_str = ft_strchr(*str, '\'');
-	i = tmp_str - *str;
-	front_str = ft_substr(*str, 0, i);
-	back_str = ft_substr(*str, i + 1, ft_strlen(*str) - i - 1);
+	pos = ft_strchr(*str, quote);
+	idx = pos - *str;
+	front = ft_substr(*str, 0, idx);
+	back = ft_substr(*str, idx + 1, ft_strlen(*str) - idx - 1);
+	joined = ft_strjoin(front, back);
+	free(front);
+	free(back);
 	free(*str);
-	*str = ft_strjoin(front_str, back_str);
-	free(front_str);
-	free(back_str);
-	return ;
+	*str = joined;
 }
 
-void	remove_quotes_double(char **str)
-{
-	char	*tmp_str;
-	char	*front_str;
-	char	*back_str;
-	size_t	i;
-
-	if (*str == NULL)
-		return ;
-	tmp_str = ft_strchr(*str, '\"');
-	i = tmp_str - *str;
-	front_str = ft_substr(*str, 0, i);
-	back_str = ft_substr(*str, i + 1, ft_strlen(*str) - i - 1);
-	free(*str);
-	*str = ft_strjoin(front_str, back_str);
-	free(front_str);
-	free(back_str);
-	return ;
-}
-
-void	remove_quotes_helper(char **str)
+static void	remove_quotes_helper(char **str)
+/*
+ * Removes paired single or double quotes from the string.
+ *
+ * @param str Pointer to the string.
+ */
 {
 	size_t	i;
-	int		single_flag;
-	int		double_flag;
+	int		single;
+	int		dbl;
 
-	if (*str == NULL)
+	if (!str || !*str)
 		return ;
 	i = 0;
-	single_flag = 0;
-	double_flag = 0;
-	while ((*str)[i] != '\0')
+	single = 0;
+	dbl = 0;
+	while ((*str)[i])
 	{
-		if ((*str)[i] == '\'' && double_flag == 0)
+		if ((*str)[i] == '\'' && dbl == 0)
 		{
-			remove_quotes_single(str);
-			if (single_flag == 0)
-				single_flag = 1;
-			else
-				single_flag = 0;
+			remove_quote_at(str, '\'');
+			single = !single;
 			i--;
 		}
-		else if ((*str)[i] == '\"' && single_flag == 0)
+		else if ((*str)[i] == '"' && single == 0)
 		{
-			remove_quotes_double(str);
-			if (double_flag == 0)
-				double_flag = 1;
-			else
-				double_flag = 0;
+			remove_quote_at(str, '"');
+			dbl = !dbl;
 			i--;
 		}
 		i++;
 	}
-	return ;
 }
 
 void	remove_quotes(t_node **node)
+/*
+ * Recursively removes quotes from all nodes in the syntax tree.
+ *
+ * @param node Pointer to the root node.
+ */
 {
-	if (node == NULL || *node == NULL)
+	if (!node || !*node)
 		return ;
-	remove_quotes(&((*node)->left));
-	if (&((*node)->right))
-		remove_quotes(&((*node)->right));
-	remove_quotes_helper(&((*node)->value));
-	return ;
+	remove_quotes(&(*node)->left);
+	remove_quotes(&(*node)->right);
+	remove_quotes_helper(&(*node)->value);
 }
 
 void	expansion(t_node **node)
+/*
+ * Performs full expansion of variables and quote removal on a node.
+ *
+ * @param node Pointer to the root node.
+ */
 {
+	if (!node || !*node)
+		return ;
 	dollar2env(*node);
-	print_node(*node);
 	remove_quotes(node);
-	return ;
 }
