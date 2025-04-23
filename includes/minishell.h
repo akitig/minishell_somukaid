@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+        */
+/*   By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:41:18 by akunimot          #+#    #+#             */
-/*   Updated: 2025/03/28 14:10:57 by akunimot         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:33:54 by somukaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,10 @@ void					ft_lstadd_front_node(t_node **node, t_node *new);
 // ------- expansion -------
 // expansion.c
 void    expansion(t_node **node);
+
+// ------- builtin -------
+// builtin.c
+void    op_command(t_node *node, t_list *envp_list);
+
 
 #endif // MINISHELL_H

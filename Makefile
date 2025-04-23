@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akunimot <akitig24@gmail.com>              +#+  +:+       +#+         #
+#    By: somukaid <somukaid@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 15:32:16 by akunimot          #+#    #+#              #
-#    Updated: 2025/03/26 23:39:40 by akunimot         ###   ########.fr        #
+#    Updated: 2025/04/23 15:13:58 by somukaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS         = $(SRC_DIR)/main.c \
 				$(SRC_DIR)/ft_parser.c \
 				$(SRC_DIR)/parser.c \
 				$(SRC_DIR)/expansion.c \
+				$(SRC_DIR)/builtin.c \
 
 OBJS         = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
